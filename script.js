@@ -340,8 +340,9 @@ if (dinoCanvas) {
   let gameOver = false;
   let score = 0;
   let highScore = parseInt(localStorage.getItem('dinoHighScore')) || 0;
-  let gameSpeed = 6;
+  let velocityX = -6; // Obstacle moving speed (like reference)
   let frameCount = 0;
+  let obstacleInterval = null;
   
   // Set canvas size
   function resizeDinoCanvas() {
@@ -513,9 +514,27 @@ if (dinoCanvas) {
     };
   }
   
-  // Spawn obstacle
-  function spawnObstacle() {
-    obstacles.push(generateRandomObstacle());
+  // Spawn obstacle (called by interval, like reference implementation)
+  function placeCactus() {
+    if (gameOver || !gameRunning) return;
+    
+    let chance = Math.random();
+    
+    // Different chances for different obstacle types (like reference)
+    if (chance > 0.9) {
+      // 10% - spawn double obstacle (back to back)
+      obstacles.push(generateRandomObstacle());
+      const backToBack = generateRandomObstacle();
+      backToBack.x = dinoCanvas.width + 80; // Gap for back-to-back
+      obstacles.push(backToBack);
+    } else if (chance > 0.6) {
+      // 30% - spawn single obstacle
+      obstacles.push(generateRandomObstacle());
+    } else if (chance > 0.4) {
+      // 20% - spawn obstacle
+      obstacles.push(generateRandomObstacle());
+    }
+    // 40% - no obstacle this interval (gives breathing room)
   }
   
   // Spawn cloud
@@ -576,7 +595,7 @@ if (dinoCanvas) {
     
     // Update obstacles
     for (let i = obstacles.length - 1; i >= 0; i--) {
-      obstacles[i].x -= gameSpeed;
+      obstacles[i].x += velocityX; // Use velocityX like reference
       
       // Remove obstacle when off screen and add score
       if (obstacles[i].x + obstacles[i].width < 0) {
@@ -588,8 +607,8 @@ if (dinoCanvas) {
         }
         scoreDisplay.textContent = score;
         
-        // Gradual speed increase (very slow)
-        gameSpeed += 0.1;
+        // Gradual speed increase (make obstacles faster)
+        velocityX -= 0.15;
         
         continue; // Skip collision check for removed obstacle
       }
@@ -598,30 +617,18 @@ if (dinoCanvas) {
       if (obstacles[i].x < dino.x + dino.width && obstacles[i].x + obstacles[i].width > dino.x) {
         if (checkCollision(obstacles[i])) {
           gameOver = true;
+          if (obstacleInterval) {
+            clearInterval(obstacleInterval);
+          }
           dinoOverlay.classList.remove('hidden');
           dinoOverlay.querySelector('span').textContent = `Game Over! Score: ${score} | Press Space to Restart`;
         }
       }
     }
     
-    // Spawn obstacles at regular intervals
-    const spawnInterval = 90;
-    
-    if (frameCount % spawnInterval === 0) {
-      const lastObstacle = obstacles[obstacles.length - 1];
-      
-      // Ensure minimum gap between obstacles
-      if (!lastObstacle || lastObstacle.x < dinoCanvas.width - 250) {
-        spawnObstacle();
-        
-        // 30% chance to spawn a back-to-back obstacle
-        if (Math.random() < 0.3) {
-          // Spawn second obstacle with small gap (just enough to jump between)
-          const backToBack = generateRandomObstacle();
-          backToBack.x = dinoCanvas.width + 60 + Math.random() * 40; // 60-100px gap
-          obstacles.push(backToBack);
-        }
-      }
+    // Clean up old obstacles (keep array from growing)
+    if (obstacles.length > 10) {
+      obstacles.shift();
     }
     
     // Update clouds
@@ -638,11 +645,11 @@ if (dinoCanvas) {
     }
     
     // Update ground offset
-    groundOffset = (groundOffset + gameSpeed) % 20;
+    groundOffset = (groundOffset - velocityX) % 20;
     
     // Cap max speed
-    if (gameSpeed > 12) {
-      gameSpeed = 12;
+    if (velocityX < -14) {
+      velocityX = -14;
     }
   }
   
@@ -683,10 +690,15 @@ if (dinoCanvas) {
   
   // Start game
   function startGame() {
+    // Clear any existing interval
+    if (obstacleInterval) {
+      clearInterval(obstacleInterval);
+    }
+    
     gameRunning = true;
     gameOver = false;
     score = 0;
-    gameSpeed = 6;
+    velocityX = -6;
     frameCount = 0;
     obstacles = [];
     clouds = [];
@@ -696,6 +708,9 @@ if (dinoCanvas) {
     dino.velocityY = 0;
     scoreDisplay.textContent = '0';
     dinoOverlay.classList.add('hidden');
+    
+    // Start spawning obstacles at regular intervals (like reference: 1000ms)
+    obstacleInterval = setInterval(placeCactus, 1200);
   }
   
   // Jump
