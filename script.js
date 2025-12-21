@@ -507,10 +507,22 @@ if (dinoCanvas) {
     const dinoHeight = dino.ducking ? 25 : dino.height;
     const dinoY = dino.ducking ? groundY - 25 : dino.y - dino.height;
     
-    return dino.x < obs.x + obs.width &&
-           dino.x + dino.width - 10 > obs.x &&
-           dinoY < groundY - obs.height + obs.height &&
-           dinoY + dinoHeight > groundY - obs.height;
+    // Smaller hitbox for more forgiving gameplay
+    const hitboxPadding = 10;
+    const dinoLeft = dino.x + hitboxPadding;
+    const dinoRight = dino.x + dino.width - 15;
+    const dinoTop = dinoY + hitboxPadding;
+    const dinoBottom = dinoY + dinoHeight;
+    
+    const obsLeft = obs.x + 5;
+    const obsRight = obs.x + obs.width - 5;
+    const obsTop = groundY - obs.height + 5;
+    const obsBottom = groundY;
+    
+    return dinoRight > obsLeft &&
+           dinoLeft < obsRight &&
+           dinoBottom > obsTop &&
+           dinoTop < obsBottom;
   }
   
   // Update game
@@ -535,6 +547,7 @@ if (dinoCanvas) {
     for (let i = obstacles.length - 1; i >= 0; i--) {
       obstacles[i].x -= gameSpeed;
       
+      // Remove obstacle when off screen and add score
       if (obstacles[i].x + obstacles[i].width < 0) {
         obstacles.splice(i, 1);
         score++;
@@ -543,18 +556,29 @@ if (dinoCanvas) {
           localStorage.setItem('dinoHighScore', highScore);
         }
         scoreDisplay.textContent = score;
+        continue; // Skip collision check for removed obstacle
       }
       
-      if (checkCollision(obstacles[i])) {
-        gameOver = true;
-        dinoOverlay.classList.remove('hidden');
-        dinoOverlay.querySelector('span').textContent = `Game Over! Score: ${score} | Press Space to Restart`;
+      // Only check collision if dino is near the obstacle
+      if (obstacles[i].x < dino.x + dino.width + 20 && obstacles[i].x + obstacles[i].width > dino.x - 20) {
+        if (checkCollision(obstacles[i])) {
+          gameOver = true;
+          dinoOverlay.classList.remove('hidden');
+          dinoOverlay.querySelector('span').textContent = `Game Over! Score: ${score} | Press Space to Restart`;
+        }
       }
     }
     
-    // Spawn obstacles
-    if (frameCount % Math.max(60, 120 - score * 2) === 0) {
-      spawnObstacle();
+    // Spawn obstacles - ensure minimum distance between obstacles
+    const minSpawnInterval = 80;
+    const spawnInterval = Math.max(minSpawnInterval, 150 - Math.floor(score / 5) * 10);
+    
+    if (frameCount % spawnInterval === 0) {
+      // Only spawn if there's enough distance from last obstacle
+      const lastObstacle = obstacles[obstacles.length - 1];
+      if (!lastObstacle || lastObstacle.x < dinoCanvas.width - 200) {
+        spawnObstacle();
+      }
     }
     
     // Update clouds
