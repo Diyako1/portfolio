@@ -509,34 +509,24 @@ body {
 }
 
 .nav-link {
-  color: var(--text-color);
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
   position: relative;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--text-muted);
 }
 
-.nav-link:first-child {
+.nav-link.active {
   color: var(--highlight-color);
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background-color: var(--highlight-color);
-  transition: width 0.15s ease;
+  font-weight: 600;
+  border-bottom: 1px solid var(--highlight-color);
 }
 
 .nav-link:hover {
   color: var(--highlight-color);
-}
-
-.nav-link:hover::after {
-  width: 100%;
+  border-bottom-color: var(--highlight-color);
 }
 
 /* Theme Toggle Button */
