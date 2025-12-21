@@ -502,7 +502,7 @@ body {
   height: 1em;
   background-color: var(--highlight-color);
   animation: blink 1s step-end infinite;
-  margin-left: 2px;
+  margin-left: 0.3em;
   vertical-align: text-bottom;
   transform: skewX(-12deg);
 }
