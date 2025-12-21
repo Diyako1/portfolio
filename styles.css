@@ -419,65 +419,15 @@ body {
   gap: 0.8rem;
 }
 
-/* Icon Loop */
-.icon-loop-container {
-  width: 120px;
-  overflow: hidden;
-  position: relative;
-}
-
-.icon-loop-container::before,
-.icon-loop-container::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 25px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.icon-loop-container::before {
-  left: 0;
-  background: linear-gradient(to right, var(--bg-color), transparent);
-}
-
-.icon-loop-container::after {
-  right: 0;
-  background: linear-gradient(to left, var(--bg-color), transparent);
-}
-
-.icon-loop-track {
-  display: flex;
-  gap: 0.8rem;
-  animation: iconLoop 6s linear infinite;
-  width: max-content;
-}
-
-.icon-loop-container:hover .icon-loop-track {
-  animation-play-state: paused;
-}
-
-@keyframes iconLoop {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
 .header-social-link {
   color: var(--text-color);
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color 0.2s ease;
   display: flex;
   align-items: center;
-  flex-shrink: 0;
 }
 
 .header-social-link:hover {
   color: var(--highlight-color);
-  transform: scale(1.2);
 }
 
 /* Theme Toggle Button */
