@@ -283,7 +283,6 @@ if (locationElement) {
   // Add cursor element
   const cursor = document.createElement('span');
   cursor.className = 'typing-cursor';
-  cursor.textContent = '|';
   locationElement.parentNode.insertBefore(cursor, locationElement.nextSibling);
   
   function transitionToNext() {
