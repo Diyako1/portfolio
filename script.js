@@ -252,7 +252,6 @@ const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*
 decryptElements.forEach(element => {
   const originalText = element.dataset.text || element.textContent;
   let interval = null;
-  let isClicked = false;
   
   element.addEventListener('mouseenter', () => {
     clearInterval(interval);
@@ -271,8 +270,79 @@ decryptElements.forEach(element => {
   element.addEventListener('mouseleave', () => {
     clearInterval(interval);
     element.textContent = originalText;
-    isClicked = false;
   });
 });
+
+// Location Rotation with Decrypt Effect
+const locationElement = document.querySelector('.location-decrypt');
+if (locationElement) {
+  const locations = JSON.parse(locationElement.dataset.locations);
+  let currentIndex = 0;
+  let interval = null;
+  let eraseInterval = null;
+  
+  function scrambleText(text) {
+    return text.split('').map(char => {
+      if (char === ' ') return ' ';
+      return characters[Math.floor(Math.random() * characters.length)];
+    }).join('');
+  }
+  
+  function transitionToNext() {
+    const currentText = locations[currentIndex];
+    const nextIndex = (currentIndex + 1) % locations.length;
+    const nextText = locations[nextIndex];
+    
+    let erasePos = currentText.length;
+    let revealPos = 0;
+    let phase = 'erase'; // erase, scramble, reveal
+    let scrambleCount = 0;
+    
+    clearInterval(interval);
+    
+    interval = setInterval(() => {
+      if (phase === 'erase') {
+        // Erase from right to left
+        erasePos--;
+        const visible = currentText.substring(0, erasePos);
+        const scrambled = scrambleText(currentText.substring(erasePos));
+        locationElement.textContent = visible + scrambled.substring(0, currentText.length - erasePos);
+        
+        if (erasePos <= 0) {
+          phase = 'scramble';
+          scrambleCount = 0;
+        }
+      } else if (phase === 'scramble') {
+        // Full scramble for a bit
+        const maxLen = Math.max(currentText.length, nextText.length);
+        locationElement.textContent = scrambleText(nextText.padEnd(maxLen, ' ')).trim();
+        scrambleCount++;
+        
+        if (scrambleCount > 8) {
+          phase = 'reveal';
+          revealPos = 0;
+        }
+      } else if (phase === 'reveal') {
+        // Reveal from left to right
+        revealPos++;
+        const revealed = nextText.substring(0, revealPos);
+        const scrambled = scrambleText(nextText.substring(revealPos));
+        locationElement.textContent = revealed + scrambled;
+        
+        if (revealPos >= nextText.length) {
+          locationElement.textContent = nextText;
+          currentIndex = nextIndex;
+          clearInterval(interval);
+          
+          // Wait before next transition
+          setTimeout(transitionToNext, 2500);
+        }
+      }
+    }, 50);
+  }
+  
+  // Start the rotation after initial delay
+  setTimeout(transitionToNext, 2500);
+}
 
 // Portfolio loaded
