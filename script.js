@@ -588,8 +588,8 @@ if (dinoCanvas) {
         }
         scoreDisplay.textContent = score;
         
-        // Double speed after every obstacle
-        gameSpeed *= 2;
+        // Gradual speed increase
+        gameSpeed += 0.2;
         
         continue; // Skip collision check for removed obstacle
       }
@@ -649,8 +649,8 @@ if (dinoCanvas) {
     groundOffset = (groundOffset + gameSpeed) % 20;
     
     // Cap max speed
-    if (gameSpeed > 18) {
-      gameSpeed = 18;
+    if (gameSpeed > 14) {
+      gameSpeed = 14;
     }
   }
   
