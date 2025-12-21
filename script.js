@@ -361,8 +361,8 @@ if (dinoCanvas) {
   const dino = {
     x: 50,
     y: groundY,
-    width: 30,
-    height: 32,
+    width: 35,
+    height: 44,
     velocityY: 0,
     jumping: false,
     ducking: false
@@ -393,34 +393,73 @@ if (dinoCanvas) {
     };
   }
   
-  // Draw dino
+  // Draw dino (T-Rex style like Chrome game)
   function drawDino() {
     const colors = getGameColors();
     dinoCtx.fillStyle = colors.fg;
     
-    const dinoHeight = dino.ducking ? 18 : dino.height;
-    const dinoY = dino.ducking ? groundY - 18 : dino.y - dino.height;
+    const dinoHeight = dino.ducking ? 15 : dino.height;
+    const dinoY = dino.ducking ? groundY - 15 : dino.y - dino.height;
+    const x = dino.x;
     
-    // Body
-    dinoCtx.fillRect(dino.x, dinoY, dino.width - 8, dinoHeight);
-    
-    // Head
-    dinoCtx.fillRect(dino.x + 10, dinoY - 7, 18, 14);
-    
-    // Eye
-    dinoCtx.fillStyle = colors.bg;
-    dinoCtx.fillRect(dino.x + 22, dinoY - 4, 3, 3);
-    
-    // Legs animation
-    dinoCtx.fillStyle = colors.fg;
-    if (dino.jumping) {
-      dinoCtx.fillRect(dino.x + 3, dinoY + dinoHeight, 6, 7);
-      dinoCtx.fillRect(dino.x + 12, dinoY + dinoHeight, 6, 7);
+    if (dino.ducking) {
+      // Ducking dino - flat and long
+      dinoCtx.fillRect(x, dinoY + 5, 35, 10); // Long body
+      dinoCtx.fillRect(x + 30, dinoY, 12, 10); // Head
+      dinoCtx.fillStyle = colors.bg;
+      dinoCtx.fillRect(x + 38, dinoY + 2, 3, 3); // Eye
     } else {
-      if (Math.floor(frameCount / 5) % 2 === 0) {
-        dinoCtx.fillRect(dino.x + 3, dinoY + dinoHeight, 6, 7);
+      // Standing T-Rex
+      
+      // Head (rectangular with flat top)
+      dinoCtx.fillRect(x + 10, dinoY - 2, 22, 16);
+      
+      // Snout bump
+      dinoCtx.fillRect(x + 28, dinoY + 2, 6, 8);
+      
+      // Eye
+      dinoCtx.fillStyle = colors.bg;
+      dinoCtx.fillRect(x + 26, dinoY + 2, 4, 4);
+      dinoCtx.fillStyle = colors.fg;
+      
+      // Body (main torso)
+      dinoCtx.fillRect(x + 5, dinoY + 14, 20, 18);
+      
+      // Back curve
+      dinoCtx.fillRect(x + 2, dinoY + 16, 6, 12);
+      
+      // Tail
+      dinoCtx.fillRect(x - 8, dinoY + 14, 12, 6);
+      dinoCtx.fillRect(x - 14, dinoY + 12, 8, 5);
+      dinoCtx.fillRect(x - 18, dinoY + 10, 6, 4);
+      
+      // Tiny arms (T-Rex style!)
+      dinoCtx.fillRect(x + 20, dinoY + 18, 6, 3);
+      dinoCtx.fillRect(x + 24, dinoY + 20, 3, 4);
+      
+      // Legs animation
+      if (dino.jumping) {
+        // Both legs down when jumping
+        dinoCtx.fillRect(x + 6, dinoY + 32, 6, 10);
+        dinoCtx.fillRect(x + 16, dinoY + 32, 6, 10);
+        // Feet
+        dinoCtx.fillRect(x + 4, dinoY + 40, 10, 3);
+        dinoCtx.fillRect(x + 14, dinoY + 40, 10, 3);
       } else {
-        dinoCtx.fillRect(dino.x + 12, dinoY + dinoHeight, 6, 7);
+        // Running animation - alternate legs
+        if (Math.floor(frameCount / 5) % 2 === 0) {
+          // Left leg forward, right leg back
+          dinoCtx.fillRect(x + 6, dinoY + 32, 6, 8);
+          dinoCtx.fillRect(x + 4, dinoY + 38, 10, 3);
+          dinoCtx.fillRect(x + 16, dinoY + 32, 6, 10);
+          dinoCtx.fillRect(x + 14, dinoY + 40, 10, 3);
+        } else {
+          // Right leg forward, left leg back
+          dinoCtx.fillRect(x + 6, dinoY + 32, 6, 10);
+          dinoCtx.fillRect(x + 4, dinoY + 40, 10, 3);
+          dinoCtx.fillRect(x + 16, dinoY + 32, 6, 8);
+          dinoCtx.fillRect(x + 14, dinoY + 38, 10, 3);
+        }
       }
     }
   }
@@ -544,8 +583,8 @@ if (dinoCanvas) {
   
   // Check collision - check against each shape in the obstacle
   function checkCollision(obs) {
-    const dinoHeight = dino.ducking ? 18 : dino.height;
-    const dinoY = dino.ducking ? groundY - 18 : dino.y - dino.height;
+    const dinoHeight = dino.ducking ? 15 : dino.height;
+    const dinoY = dino.ducking ? groundY - 15 : dino.y - dino.height;
     
     // Dino hitbox (tight box around the dino)
     const dinoLeft = dino.x + 5;
