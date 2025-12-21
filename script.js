@@ -252,33 +252,26 @@ const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*
 decryptElements.forEach(element => {
   const originalText = element.dataset.text || element.textContent;
   let interval = null;
-  let iteration = 0;
+  let isClicked = false;
   
   element.addEventListener('mouseenter', () => {
-    iteration = 0;
     clearInterval(interval);
     
     interval = setInterval(() => {
       element.textContent = originalText
         .split('')
-        .map((char, index) => {
+        .map((char) => {
           if (char === ' ') return ' ';
-          if (index < iteration) return originalText[index];
           return characters[Math.floor(Math.random() * characters.length)];
         })
         .join('');
-      
-      if (iteration >= originalText.length) {
-        clearInterval(interval);
-      }
-      
-      iteration += 1/3;
-    }, 30);
+    }, 50);
   });
   
   element.addEventListener('mouseleave', () => {
     clearInterval(interval);
     element.textContent = originalText;
+    isClicked = false;
   });
 });
 
