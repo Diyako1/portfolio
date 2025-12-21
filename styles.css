@@ -498,10 +498,9 @@ body {
 /* Navigation Line & Links */
 .nav-line {
   width: 100%;
-  height: 1px;
-  background-color: var(--text-muted);
+  height: 2px;
+  background-color: var(--highlight-color);
   margin: 0.8rem 0;
-  opacity: 0.3;
 }
 
 .header-nav {
