@@ -610,9 +610,17 @@ if (dinoCanvas) {
     if (frameCount % spawnInterval === 0) {
       const lastObstacle = obstacles[obstacles.length - 1];
       
-      // Ensure minimum gap of 250px between obstacles
+      // Ensure minimum gap between obstacles
       if (!lastObstacle || lastObstacle.x < dinoCanvas.width - 250) {
         spawnObstacle();
+        
+        // 30% chance to spawn a back-to-back obstacle
+        if (Math.random() < 0.3) {
+          // Spawn second obstacle with small gap (just enough to jump between)
+          const backToBack = generateRandomObstacle();
+          backToBack.x = dinoCanvas.width + 60 + Math.random() * 40; // 60-100px gap
+          obstacles.push(backToBack);
+        }
       }
     }
     
