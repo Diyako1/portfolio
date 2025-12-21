@@ -245,4 +245,41 @@ if (!isMobile && cursorWrapper) {
   });
 }
 
+// Decrypted Text Effect
+const decryptElements = document.querySelectorAll('.decrypt-text');
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+0123456789';
+
+decryptElements.forEach(element => {
+  const originalText = element.dataset.text || element.textContent;
+  let interval = null;
+  let iteration = 0;
+  
+  element.addEventListener('mouseenter', () => {
+    iteration = 0;
+    clearInterval(interval);
+    
+    interval = setInterval(() => {
+      element.textContent = originalText
+        .split('')
+        .map((char, index) => {
+          if (char === ' ') return ' ';
+          if (index < iteration) return originalText[index];
+          return characters[Math.floor(Math.random() * characters.length)];
+        })
+        .join('');
+      
+      if (iteration >= originalText.length) {
+        clearInterval(interval);
+      }
+      
+      iteration += 1/3;
+    }, 30);
+  });
+  
+  element.addEventListener('mouseleave', () => {
+    clearInterval(interval);
+    element.textContent = originalText;
+  });
+});
+
 // Portfolio loaded

@@ -482,6 +482,19 @@ body {
   color: var(--highlight-color);
 }
 
+/* Decrypt Text */
+.decrypt-text {
+  color: var(--text-muted);
+  font-family: monospace;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.decrypt-text:hover {
+  color: var(--text-color);
+}
+
 /* Theme Toggle Button */
 #theme-toggle {
   background: transparent;
