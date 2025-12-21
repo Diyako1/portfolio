@@ -588,8 +588,8 @@ if (dinoCanvas) {
         }
         scoreDisplay.textContent = score;
         
-        // Speed up after every obstacle
-        gameSpeed += 0.3;
+        // Double speed after every obstacle
+        gameSpeed *= 2;
         
         continue; // Skip collision check for removed obstacle
       }
