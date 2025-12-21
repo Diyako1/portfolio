@@ -360,56 +360,40 @@ body {
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
 .target-cursor-dot {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 6px;
-  height: 6px;
-  background: #fff;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
+  display: none;
 }
 
 .target-cursor-corner {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border: 2px solid #fff;
-  transition: all 0.2s ease;
+  transition: transform 0.15s ease;
 }
 
 .corner-tl {
-  transform: translate(-18px, -18px);
   border-right: none;
   border-bottom: none;
 }
 
 .corner-tr {
-  transform: translate(6px, -18px);
   border-left: none;
   border-bottom: none;
 }
 
 .corner-br {
-  transform: translate(6px, 6px);
   border-left: none;
   border-top: none;
 }
 
 .corner-bl {
-  transform: translate(-18px, 6px);
   border-right: none;
   border-top: none;
-}
-
-.target-cursor-wrapper.active .target-cursor-dot {
-  transform: translate(-50%, -50%) scale(0.5);
 }
 
 @media (max-width: 768px), (hover: none) {

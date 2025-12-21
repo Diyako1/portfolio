@@ -191,7 +191,6 @@ animate();
 
 // Target Cursor
 const cursorWrapper = document.querySelector('.target-cursor-wrapper');
-const cursorDot = document.querySelector('.target-cursor-dot');
 const corners = document.querySelectorAll('.target-cursor-corner');
 
 // Check if mobile/touch device
@@ -199,36 +198,20 @@ const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 if (!isMobile && cursorWrapper) {
   let mouseX = 0, mouseY = 0;
-  let cursorX = 0, cursorY = 0;
   let isActive = false;
-  let rotation = 0;
   
-  // Hide default cursor
-  document.body.style.cursor = 'none';
-  document.querySelectorAll('a, button').forEach(el => {
-    el.style.cursor = 'none';
-  });
+  // Hide cursor wrapper by default
+  cursorWrapper.style.opacity = '0';
   
   // Track mouse position
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-  });
-  
-  // Smooth cursor follow
-  function animateCursor() {
-    cursorX += (mouseX - cursorX) * 0.15;
-    cursorY += (mouseY - cursorY) * 0.15;
     
-    if (!isActive) {
-      rotation += 1;
+    if (isActive) {
+      cursorWrapper.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
     }
-    
-    cursorWrapper.style.transform = `translate(${cursorX}px, ${cursorY}px) rotate(${rotation}deg)`;
-    
-    requestAnimationFrame(animateCursor);
-  }
-  animateCursor();
+  });
   
   // Target hover effect
   const targets = document.querySelectorAll('.cursor-target');
@@ -236,43 +219,29 @@ if (!isMobile && cursorWrapper) {
   targets.forEach(target => {
     target.addEventListener('mouseenter', () => {
       isActive = true;
-      cursorWrapper.classList.add('active');
+      cursorWrapper.style.opacity = '1';
+      document.body.style.cursor = 'none';
+      target.style.cursor = 'none';
       
       const rect = target.getBoundingClientRect();
-      const padding = 5;
+      const padding = 3;
+      const cornerSize = 8;
       
-      // Position corners around the target element
-      corners[0].style.transform = `translate(${rect.left - cursorX - padding - 12}px, ${rect.top - cursorY - padding - 12}px)`;
-      corners[1].style.transform = `translate(${rect.right - cursorX + padding}px, ${rect.top - cursorY - padding - 12}px)`;
-      corners[2].style.transform = `translate(${rect.right - cursorX + padding}px, ${rect.bottom - cursorY + padding}px)`;
-      corners[3].style.transform = `translate(${rect.left - cursorX - padding - 12}px, ${rect.bottom - cursorY + padding}px)`;
+      cursorWrapper.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
       
-      // Stop rotation
-      cursorWrapper.style.transform = `translate(${cursorX}px, ${cursorY}px) rotate(0deg)`;
-      rotation = 0;
+      // Position corners exactly around the target element
+      corners[0].style.transform = `translate(${rect.left - mouseX - padding}px, ${rect.top - mouseY - padding}px)`;
+      corners[1].style.transform = `translate(${rect.right - mouseX + padding - cornerSize}px, ${rect.top - mouseY - padding}px)`;
+      corners[2].style.transform = `translate(${rect.right - mouseX + padding - cornerSize}px, ${rect.bottom - mouseY + padding - cornerSize}px)`;
+      corners[3].style.transform = `translate(${rect.left - mouseX - padding}px, ${rect.bottom - mouseY + padding - cornerSize}px)`;
     });
     
     target.addEventListener('mouseleave', () => {
       isActive = false;
-      cursorWrapper.classList.remove('active');
-      
-      // Reset corners
-      corners[0].style.transform = 'translate(-18px, -18px)';
-      corners[1].style.transform = 'translate(6px, -18px)';
-      corners[2].style.transform = 'translate(6px, 6px)';
-      corners[3].style.transform = 'translate(-18px, 6px)';
+      cursorWrapper.style.opacity = '0';
+      document.body.style.cursor = '';
+      target.style.cursor = '';
     });
-  });
-  
-  // Click effect
-  document.addEventListener('mousedown', () => {
-    cursorDot.style.transform = 'translate(-50%, -50%) scale(0.5)';
-    cursorWrapper.style.transform = `translate(${cursorX}px, ${cursorY}px) rotate(${rotation}deg) scale(0.9)`;
-  });
-  
-  document.addEventListener('mouseup', () => {
-    cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
-    cursorWrapper.style.transform = `translate(${cursorX}px, ${cursorY}px) rotate(${rotation}deg) scale(1)`;
   });
 }
 
