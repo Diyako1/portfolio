@@ -498,7 +498,7 @@ body {
 /* Typing Cursor */
 .typing-cursor {
   display: inline-block;
-  width: 2px;
+  width: 1px;
   height: 1em;
   background-color: var(--highlight-color);
   animation: blink 1s step-end infinite;
