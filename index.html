@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Diyako Gilibagu</title>
+		<meta name="description" content="Diyako Gilibagu's portfolio" />
+		<link rel="stylesheet" href="styles.css" />
+		<link rel="icon" type="image/png" href="./src/images/logo.png" />
+	</head>
+	<body>
+		<canvas id="dot-canvas"></canvas>
+		<div class="container">
+			<div class="profile-bio-wrapper">
+				<header class="profile">
+					<div class="profile-header-row">
+						<h1>Diyako Gilibagu</h1>
+						<div class="header-icons">
+							<a href="https://www.linkedin.com/in/diyako-gilibagu/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="header-social-link">
+								<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+									<rect x="2" y="9" width="4" height="12"></rect>
+									<circle cx="4" cy="4" r="2"></circle>
+								</svg>
+							</a>
+							<a href="https://x.com/Diyako_G" target="_blank" rel="noopener noreferrer" aria-label="Twitter/X" class="header-social-link">
+								<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M4 4l11.733 16h4.267l-11.733 -16z"></path>
+									<path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+								</svg>
+							</a>
+							<a href="https://github.com/Diyako1" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="header-social-link">
+								<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+								</svg>
+							</a>
+							<button id="theme-toggle" aria-label="Toggle dark mode">
+								<svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="12" cy="12" r="5"></circle>
+									<line x1="12" y1="1" x2="12" y2="3"></line>
+									<line x1="12" y1="21" x2="12" y2="23"></line>
+									<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+									<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+									<line x1="1" y1="12" x2="3" y2="12"></line>
+									<line x1="21" y1="12" x2="23" y2="12"></line>
+									<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+									<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+								</svg>
+								<svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<p class="title">Software Engineer</p>
+				</header>
+				<section class="bio">
+					<p>
+						I’m a Stats and CS student @ <strong><a href="https://uwaterloo.ca/" target="_blank" rel="noopener noreferrer"><img src="./src/images/uwaterloo.png" alt="University of Waterloo" style="height: 1.2em; vertical-align: -0.2em; margin-right: 1px;">UWaterloo</a></strong>. I’ve built software across machine learning, backend, and data-intensive applications. I’m currently working as a <strong>Data Engineer</strong> @ <strong><a href="https://ranovus.com/" target="_blank" rel="noopener noreferrer">Ranovus Inc.</a></strong>, building reliable data systems and automated analytics for photonic and ASIC performance.
+					</p>
+					<p>When I’m not working, I’m usually lifting (I can bench 315), hacking on side projects, or doom scrolling.</p>
+				</section>
+			</div>
+			<section class="experience">
+				<div class="experience-heading">
+					<span>Previous Experience</span>
+				</div>
+				<ul>
+					<li class="experience-item">
+						<a href="https://www.watonomous.ca" target="_blank" rel="noopener noreferrer" class="project-link" style="display: inline;"><strong><span style="font-style: normal;">Software Engineer  </span> <span style="border-bottom: 1px solid white; padding-bottom: 2px;"><img src="./src/images/watonomous.jpeg" alt="Watonomous" style="height: 1.2em; vertical-align: -0.3em; margin: 0 1px; border-radius: 2px;">Watonomous</span></strong>&nbsp; building software systems supporting autonomy experimentation and vehicle testing</a>
+					</li>
+					<li class="experience-item">
+						<a href="https://www.uottawa.ca/en" target="_blank" rel="noopener noreferrer" class="project-link" style="display: inline;"><strong><span style="font-style: normal;">ML Research  </span> <span style="border-bottom: 1px solid white; padding-bottom: 2px;"><img src="./src/images/uottawa.png" alt="UOttawa" style="height: 1.2em; vertical-align: -0.2em; margin: 0 1px; border-radius: 2px;">UOttawa</span></strong>&nbsp; applying NLP and topic modeling to analyze large-scale public discourse and metaphors around AI</a>
+					</li>
+					<li class="experience-item">
+						<a href="https://watai.ca" target="_blank" rel="noopener noreferrer" class="project-link" style="display: inline;"><strong><span style="font-style: normal;">ML Engineer  </span> <span style="border-bottom: 1px solid white; padding-bottom: 2px;"><img src="./src/images/watai.png" alt="Wat.ai" style="height: 1.2em; vertical-align: -0.3em; margin: 0 1px; border-radius: 2px;">Wat.ai</span></strong>&nbsp; designing multimodal deep learning systems that translate lip movements into speech</a>
+					</li>
+					<li class="experience-item">
+						<a href="https://www.linkedin.com/company/forrestgreenrmc/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="project-link" style="display: inline;"><strong><span style="font-style: normal;">Data Analyst  </span> <span style="border-bottom: 1px solid white; padding-bottom: 2px;"><img src="./src/images/forrestgreen.png" alt="Forrest Green" style="height: 1.2em; vertical-align: -0.3em; margin: 0 3px 0 1px; border-radius: 2px;">Forrest Green</span></strong>&nbsp; lead program delivery and data analysis supporting initiatives for interns from 14 First Nations</a>
+					</li>
+				</ul>
+			</section>
+			<section class="experience">
+				<div class="experience-heading">
+					<span>Projects I'm currently working on..</span>
+				</div>
+				<ul>
+					<li class="experience-item project-item">
+						<a href="https://github.com/Diyako1/portfolio" target="_blank" rel="noopener noreferrer" class="project-link" style="display: inline;"><strong><span class="project-name">Polylens</span></strong>&nbsp; Built a transformer-powered pipeline to detect political bias in news headlines and quantify gains over traditional NLP baselines.</a>
+					</li>
+					<li class="experience-item project-item">
+						<a href="https://github.com/Diyako1/versus" target="_blank" rel="noopener noreferrer" class="project-link" style="display: inline;"><strong><span class="project-name">Versus</span></strong>&nbsp; Built a live LLM arena where models compete head-to-head across strategy, reasoning, and language challenges.</a>
+					</li>
+				</ul>
+			</section>
+			<div class="bottom-row">
+				<span class="last-updated">last updated dec 20 2025</span>
+				<a href="mailto:d2giliba@uwaterloo.ca" class="bottom-email">d2giliba[at]uwaterloo[dot]ca</a>
+			</div>
+		</div>
+		<script src="script.js"></script>
+	</body>
+</html>
