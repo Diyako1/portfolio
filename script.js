@@ -520,21 +520,17 @@ if (dinoCanvas) {
     
     let chance = Math.random();
     
-    // Different chances for different obstacle types (like reference)
-    if (chance > 0.9) {
-      // 10% - spawn double obstacle (back to back)
+    // Different chances for different obstacle types
+    if (chance > 0.85) {
+      // 15% - spawn double obstacle (back to back)
       obstacles.push(generateRandomObstacle());
       const backToBack = generateRandomObstacle();
       backToBack.x = dinoCanvas.width + 80; // Gap for back-to-back
       obstacles.push(backToBack);
-    } else if (chance > 0.6) {
-      // 30% - spawn single obstacle
-      obstacles.push(generateRandomObstacle());
-    } else if (chance > 0.4) {
-      // 20% - spawn obstacle
+    } else {
+      // 85% - spawn single obstacle (always spawn something)
       obstacles.push(generateRandomObstacle());
     }
-    // 40% - no obstacle this interval (gives breathing room)
   }
   
   // Spawn cloud
@@ -710,7 +706,7 @@ if (dinoCanvas) {
     dinoOverlay.classList.add('hidden');
     
     // Start spawning obstacles at regular intervals (like reference: 1000ms)
-    obstacleInterval = setInterval(placeCactus, 1200);
+    obstacleInterval = setInterval(placeCactus, 1000);
   }
   
   // Jump
