@@ -527,27 +527,33 @@ if (dinoCanvas) {
     });
   }
   
-  // Check collision
+  // Check collision - check against each shape in the obstacle
   function checkCollision(obs) {
     const dinoHeight = dino.ducking ? 18 : dino.height;
     const dinoY = dino.ducking ? groundY - 18 : dino.y - dino.height;
     
-    // Smaller hitbox for more forgiving gameplay
-    const hitboxPadding = 10;
-    const dinoLeft = dino.x + hitboxPadding;
-    const dinoRight = dino.x + dino.width - 15;
-    const dinoTop = dinoY + hitboxPadding;
+    // Dino hitbox (tight box around the dino)
+    const dinoLeft = dino.x + 5;
+    const dinoRight = dino.x + dino.width - 10;
+    const dinoTop = dinoY + 5;
     const dinoBottom = dinoY + dinoHeight;
     
-    const obsLeft = obs.x + 5;
-    const obsRight = obs.x + obs.width - 5;
-    const obsTop = groundY - obs.height + 5;
-    const obsBottom = groundY;
+    // Check collision against each shape in the obstacle
+    for (const shape of obs.shapes) {
+      const shapeLeft = obs.x + shape.offsetX;
+      const shapeRight = obs.x + shape.offsetX + shape.width;
+      const shapeTop = groundY - shape.height;
+      const shapeBottom = groundY;
+      
+      if (dinoRight > shapeLeft &&
+          dinoLeft < shapeRight &&
+          dinoBottom > shapeTop &&
+          dinoTop < shapeBottom) {
+        return true;
+      }
+    }
     
-    return dinoRight > obsLeft &&
-           dinoLeft < obsRight &&
-           dinoBottom > obsTop &&
-           dinoTop < obsBottom;
+    return false;
   }
   
   // Update game
@@ -581,11 +587,15 @@ if (dinoCanvas) {
           localStorage.setItem('dinoHighScore', highScore);
         }
         scoreDisplay.textContent = score;
+        
+        // Speed up after every obstacle
+        gameSpeed += 0.3;
+        
         continue; // Skip collision check for removed obstacle
       }
       
-      // Only check collision if dino is near the obstacle
-      if (obstacles[i].x < dino.x + dino.width + 20 && obstacles[i].x + obstacles[i].width > dino.x - 20) {
+      // Check collision when dino overlaps with obstacle x range
+      if (obstacles[i].x < dino.x + dino.width && obstacles[i].x + obstacles[i].width > dino.x) {
         if (checkCollision(obstacles[i])) {
           gameOver = true;
           dinoOverlay.classList.remove('hidden');
@@ -622,9 +632,9 @@ if (dinoCanvas) {
     // Update ground offset
     groundOffset = (groundOffset + gameSpeed) % 20;
     
-    // Increase speed over time
-    if (frameCount % 500 === 0 && gameSpeed < 15) {
-      gameSpeed += 0.5;
+    // Cap max speed
+    if (gameSpeed > 18) {
+      gameSpeed = 18;
     }
   }
   
