@@ -347,35 +347,35 @@ if (dinoCanvas) {
   function resizeDinoCanvas() {
     const container = dinoCanvas.parentElement;
     dinoCanvas.width = container.clientWidth;
-    dinoCanvas.height = 150;
+    dinoCanvas.height = 100;
   }
   
   resizeDinoCanvas();
   window.addEventListener('resize', resizeDinoCanvas);
   
   // Ground
-  const groundY = dinoCanvas.height - 20;
+  const groundY = dinoCanvas.height - 15;
   
   // Dino
   const dino = {
     x: 50,
     y: groundY,
-    width: 40,
-    height: 43,
+    width: 30,
+    height: 32,
     velocityY: 0,
     jumping: false,
     ducking: false
   };
   
-  const gravity = 0.6;
-  const jumpForce = -12;
+  const gravity = 0.5;
+  const jumpForce = -9;
   
   // Obstacles
   let obstacles = [];
   const obstacleTypes = [
-    { width: 20, height: 35, type: 'cactus-small' },
-    { width: 25, height: 50, type: 'cactus-large' },
-    { width: 40, height: 30, type: 'cactus-group' }
+    { width: 15, height: 25, type: 'cactus-small' },
+    { width: 18, height: 35, type: 'cactus-large' },
+    { width: 30, height: 22, type: 'cactus-group' }
   ];
   
   // Clouds
@@ -402,29 +402,29 @@ if (dinoCanvas) {
     const colors = getGameColors();
     dinoCtx.fillStyle = colors.fg;
     
-    const dinoHeight = dino.ducking ? 25 : dino.height;
-    const dinoY = dino.ducking ? groundY - 25 : dino.y - dino.height;
+    const dinoHeight = dino.ducking ? 18 : dino.height;
+    const dinoY = dino.ducking ? groundY - 18 : dino.y - dino.height;
     
     // Body
-    dinoCtx.fillRect(dino.x, dinoY, dino.width - 10, dinoHeight);
+    dinoCtx.fillRect(dino.x, dinoY, dino.width - 8, dinoHeight);
     
     // Head
-    dinoCtx.fillRect(dino.x + 15, dinoY - 10, 25, 20);
+    dinoCtx.fillRect(dino.x + 10, dinoY - 7, 18, 14);
     
     // Eye
     dinoCtx.fillStyle = colors.bg;
-    dinoCtx.fillRect(dino.x + 30, dinoY - 5, 5, 5);
+    dinoCtx.fillRect(dino.x + 22, dinoY - 4, 3, 3);
     
     // Legs animation
     dinoCtx.fillStyle = colors.fg;
     if (dino.jumping) {
-      dinoCtx.fillRect(dino.x + 5, dinoY + dinoHeight, 8, 10);
-      dinoCtx.fillRect(dino.x + 17, dinoY + dinoHeight, 8, 10);
+      dinoCtx.fillRect(dino.x + 3, dinoY + dinoHeight, 6, 7);
+      dinoCtx.fillRect(dino.x + 12, dinoY + dinoHeight, 6, 7);
     } else {
       if (Math.floor(frameCount / 5) % 2 === 0) {
-        dinoCtx.fillRect(dino.x + 5, dinoY + dinoHeight, 8, 10);
+        dinoCtx.fillRect(dino.x + 3, dinoY + dinoHeight, 6, 7);
       } else {
-        dinoCtx.fillRect(dino.x + 17, dinoY + dinoHeight, 8, 10);
+        dinoCtx.fillRect(dino.x + 12, dinoY + dinoHeight, 6, 7);
       }
     }
   }
@@ -436,17 +436,17 @@ if (dinoCanvas) {
     
     if (obs.type === 'cactus-small') {
       dinoCtx.fillRect(obs.x, groundY - obs.height, obs.width, obs.height);
-      dinoCtx.fillRect(obs.x - 5, groundY - obs.height + 10, 5, 15);
-      dinoCtx.fillRect(obs.x + obs.width, groundY - obs.height + 15, 5, 10);
+      dinoCtx.fillRect(obs.x - 3, groundY - obs.height + 8, 3, 10);
+      dinoCtx.fillRect(obs.x + obs.width, groundY - obs.height + 10, 3, 8);
     } else if (obs.type === 'cactus-large') {
       dinoCtx.fillRect(obs.x, groundY - obs.height, obs.width, obs.height);
-      dinoCtx.fillRect(obs.x - 8, groundY - obs.height + 15, 8, 20);
-      dinoCtx.fillRect(obs.x + obs.width, groundY - obs.height + 10, 8, 25);
+      dinoCtx.fillRect(obs.x - 5, groundY - obs.height + 10, 5, 15);
+      dinoCtx.fillRect(obs.x + obs.width, groundY - obs.height + 8, 5, 18);
     } else {
       // Cactus group
-      dinoCtx.fillRect(obs.x, groundY - 35, 15, 35);
-      dinoCtx.fillRect(obs.x + 12, groundY - 45, 15, 45);
-      dinoCtx.fillRect(obs.x + 24, groundY - 30, 15, 30);
+      dinoCtx.fillRect(obs.x, groundY - 22, 10, 22);
+      dinoCtx.fillRect(obs.x + 8, groundY - 30, 10, 30);
+      dinoCtx.fillRect(obs.x + 16, groundY - 20, 10, 20);
     }
   }
   
@@ -455,9 +455,9 @@ if (dinoCanvas) {
     const colors = getGameColors();
     dinoCtx.fillStyle = colors.ground;
     dinoCtx.beginPath();
-    dinoCtx.arc(cloud.x, cloud.y, 15, 0, Math.PI * 2);
-    dinoCtx.arc(cloud.x + 20, cloud.y - 5, 12, 0, Math.PI * 2);
-    dinoCtx.arc(cloud.x + 35, cloud.y, 15, 0, Math.PI * 2);
+    dinoCtx.arc(cloud.x, cloud.y, 8, 0, Math.PI * 2);
+    dinoCtx.arc(cloud.x + 12, cloud.y - 3, 6, 0, Math.PI * 2);
+    dinoCtx.arc(cloud.x + 20, cloud.y, 8, 0, Math.PI * 2);
     dinoCtx.fill();
   }
   
@@ -497,15 +497,15 @@ if (dinoCanvas) {
   function spawnCloud() {
     clouds.push({
       x: dinoCanvas.width,
-      y: 20 + Math.random() * 40,
+      y: 15 + Math.random() * 25,
       speed: 1 + Math.random()
     });
   }
   
   // Check collision
   function checkCollision(obs) {
-    const dinoHeight = dino.ducking ? 25 : dino.height;
-    const dinoY = dino.ducking ? groundY - 25 : dino.y - dino.height;
+    const dinoHeight = dino.ducking ? 18 : dino.height;
+    const dinoY = dino.ducking ? groundY - 18 : dino.y - dino.height;
     
     // Smaller hitbox for more forgiving gameplay
     const hitboxPadding = 10;

@@ -354,7 +354,7 @@ body {
 /* Dino Game */
 .dino-game-container {
   width: 100%;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   position: relative;
   border: 1px solid var(--text-muted);
   border-radius: 4px;
@@ -363,15 +363,15 @@ body {
 }
 
 .dino-game-header {
-  padding: 0.5rem;
+  padding: 0.25rem 0.5rem;
   font-family: monospace;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
 
 #dino-canvas {
   width: 100%;
-  height: 150px;
+  height: 100px;
   display: block;
 }
 
