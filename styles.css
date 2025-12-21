@@ -421,7 +421,7 @@ body {
 
 /* Icon Loop */
 .icon-loop-container {
-  width: 80px;
+  width: 120px;
   overflow: hidden;
   position: relative;
 }
@@ -432,7 +432,7 @@ body {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 15px;
+  width: 25px;
   z-index: 2;
   pointer-events: none;
 }
