@@ -495,6 +495,20 @@ body {
   color: var(--text-color);
 }
 
+/* Typing Cursor */
+.typing-cursor {
+  display: inline-block;
+  color: var(--highlight-color);
+  animation: blink 1s step-end infinite;
+  margin-left: 1px;
+  font-weight: 300;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* Navigation Line & Links */
 .nav-line {
   width: 100%;

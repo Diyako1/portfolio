@@ -273,64 +273,45 @@ decryptElements.forEach(element => {
   });
 });
 
-// Location Rotation with Decrypt Effect
+// Location Rotation with Typewriter Effect
 const locationElement = document.querySelector('.location-decrypt');
 if (locationElement) {
   const locations = JSON.parse(locationElement.dataset.locations);
   let currentIndex = 0;
   let interval = null;
-  let eraseInterval = null;
   
-  function scrambleText(text) {
-    return text.split('').map(char => {
-      if (char === ' ') return ' ';
-      return characters[Math.floor(Math.random() * characters.length)];
-    }).join('');
-  }
+  // Add cursor element
+  const cursor = document.createElement('span');
+  cursor.className = 'typing-cursor';
+  cursor.textContent = '|';
+  locationElement.parentNode.insertBefore(cursor, locationElement.nextSibling);
   
   function transitionToNext() {
     const currentText = locations[currentIndex];
     const nextIndex = (currentIndex + 1) % locations.length;
     const nextText = locations[nextIndex];
     
-    let erasePos = currentText.length;
-    let revealPos = 0;
-    let phase = 'erase'; // erase, scramble, reveal
-    let scrambleCount = 0;
+    let pos = currentText.length;
+    let phase = 'erase'; // erase, type
     
     clearInterval(interval);
     
     interval = setInterval(() => {
       if (phase === 'erase') {
         // Erase from right to left
-        erasePos--;
-        const visible = currentText.substring(0, erasePos);
-        const scrambled = scrambleText(currentText.substring(erasePos));
-        locationElement.textContent = visible + scrambled.substring(0, currentText.length - erasePos);
+        pos--;
+        locationElement.textContent = currentText.substring(0, pos);
         
-        if (erasePos <= 0) {
-          phase = 'scramble';
-          scrambleCount = 0;
+        if (pos <= 0) {
+          phase = 'type';
+          pos = 0;
         }
-      } else if (phase === 'scramble') {
-        // Full scramble for a bit
-        const maxLen = Math.max(currentText.length, nextText.length);
-        locationElement.textContent = scrambleText(nextText.padEnd(maxLen, ' ')).trim();
-        scrambleCount++;
+      } else if (phase === 'type') {
+        // Type from left to right
+        pos++;
+        locationElement.textContent = nextText.substring(0, pos);
         
-        if (scrambleCount > 8) {
-          phase = 'reveal';
-          revealPos = 0;
-        }
-      } else if (phase === 'reveal') {
-        // Reveal from left to right
-        revealPos++;
-        const revealed = nextText.substring(0, revealPos);
-        const scrambled = scrambleText(nextText.substring(revealPos));
-        locationElement.textContent = revealed + scrambled;
-        
-        if (revealPos >= nextText.length) {
-          locationElement.textContent = nextText;
+        if (pos >= nextText.length) {
           currentIndex = nextIndex;
           clearInterval(interval);
           
@@ -338,7 +319,7 @@ if (locationElement) {
           setTimeout(transitionToNext, 2500);
         }
       }
-    }, 50);
+    }, 80);
   }
   
   // Start the rotation after initial delay
