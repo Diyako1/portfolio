@@ -372,11 +372,6 @@ if (dinoCanvas) {
   
   // Obstacles
   let obstacles = [];
-  const obstacleTypes = [
-    { width: 15, height: 25, type: 'cactus-small' },
-    { width: 18, height: 35, type: 'cactus-large' },
-    { width: 30, height: 22, type: 'cactus-group' }
-  ];
   
   // Clouds
   let clouds = [];
@@ -429,25 +424,15 @@ if (dinoCanvas) {
     }
   }
   
-  // Draw obstacle
+  // Draw obstacle - each obstacle has unique random shapes stored in obs.shapes
   function drawObstacle(obs) {
     const colors = getGameColors();
     dinoCtx.fillStyle = colors.fg;
     
-    if (obs.type === 'cactus-small') {
-      dinoCtx.fillRect(obs.x, groundY - obs.height, obs.width, obs.height);
-      dinoCtx.fillRect(obs.x - 3, groundY - obs.height + 8, 3, 10);
-      dinoCtx.fillRect(obs.x + obs.width, groundY - obs.height + 10, 3, 8);
-    } else if (obs.type === 'cactus-large') {
-      dinoCtx.fillRect(obs.x, groundY - obs.height, obs.width, obs.height);
-      dinoCtx.fillRect(obs.x - 5, groundY - obs.height + 10, 5, 15);
-      dinoCtx.fillRect(obs.x + obs.width, groundY - obs.height + 8, 5, 18);
-    } else {
-      // Cactus group
-      dinoCtx.fillRect(obs.x, groundY - 22, 10, 22);
-      dinoCtx.fillRect(obs.x + 8, groundY - 30, 10, 30);
-      dinoCtx.fillRect(obs.x + 16, groundY - 20, 10, 20);
-    }
+    // Draw each shape in the obstacle
+    obs.shapes.forEach(shape => {
+      dinoCtx.fillRect(obs.x + shape.offsetX, groundY - shape.height, shape.width, shape.height);
+    });
   }
   
   // Draw cloud
@@ -484,13 +469,53 @@ if (dinoCanvas) {
     }
   }
   
+  // Generate random obstacle shapes
+  function generateRandomObstacle() {
+    const shapes = [];
+    const numParts = 1 + Math.floor(Math.random() * 3); // 1-3 parts
+    let totalWidth = 0;
+    let maxHeight = 0;
+    
+    for (let i = 0; i < numParts; i++) {
+      const width = 4 + Math.floor(Math.random() * 8); // 4-11 width
+      const height = 18 + Math.floor(Math.random() * 22); // 18-39 height
+      const offsetX = totalWidth + (i > 0 ? Math.floor(Math.random() * 3) : 0); // slight gap variation
+      
+      shapes.push({
+        offsetX,
+        width,
+        height
+      });
+      
+      totalWidth = offsetX + width;
+      maxHeight = Math.max(maxHeight, height);
+      
+      // Sometimes add small arms/branches
+      if (Math.random() > 0.5) {
+        const armHeight = 5 + Math.floor(Math.random() * 8);
+        const armWidth = 3 + Math.floor(Math.random() * 3);
+        const armY = height - 5 - Math.floor(Math.random() * (height / 2));
+        const armSide = Math.random() > 0.5 ? -armWidth : width;
+        
+        shapes.push({
+          offsetX: offsetX + armSide,
+          width: armWidth,
+          height: armY
+        });
+      }
+    }
+    
+    return {
+      x: dinoCanvas.width,
+      width: totalWidth,
+      height: maxHeight,
+      shapes
+    };
+  }
+  
   // Spawn obstacle
   function spawnObstacle() {
-    const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
-    obstacles.push({
-      x: dinoCanvas.width,
-      ...type
-    });
+    obstacles.push(generateRandomObstacle());
   }
   
   // Spawn cloud
