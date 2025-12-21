@@ -604,15 +604,31 @@ if (dinoCanvas) {
       }
     }
     
-    // Spawn obstacles - ensure minimum distance between obstacles
-    const minSpawnInterval = 80;
-    const spawnInterval = Math.max(minSpawnInterval, 150 - Math.floor(score / 5) * 10);
+    // Spawn obstacles - more obstacles spawn as score increases
+    const baseInterval = 60;
+    const spawnInterval = Math.max(30, baseInterval - score * 5);
     
     if (frameCount % spawnInterval === 0) {
-      // Only spawn if there's enough distance from last obstacle
+      // Minimum gap between obstacles (gets smaller as score increases)
+      const minGap = Math.max(80, 200 - score * 20);
       const lastObstacle = obstacles[obstacles.length - 1];
-      if (!lastObstacle || lastObstacle.x < dinoCanvas.width - 200) {
+      
+      if (!lastObstacle || lastObstacle.x < dinoCanvas.width - minGap) {
         spawnObstacle();
+        
+        // After score 3, sometimes spawn multiple obstacles at once
+        if (score >= 3 && Math.random() > 0.5) {
+          setTimeout(() => {
+            if (gameRunning && !gameOver) spawnObstacle();
+          }, 100);
+        }
+        
+        // After score 5, even more chaos
+        if (score >= 5 && Math.random() > 0.6) {
+          setTimeout(() => {
+            if (gameRunning && !gameOver) spawnObstacle();
+          }, 200);
+        }
       }
     }
     
