@@ -588,8 +588,8 @@ if (dinoCanvas) {
         }
         scoreDisplay.textContent = score;
         
-        // Gradual speed increase
-        gameSpeed += 0.2;
+        // Gradual speed increase (very slow)
+        gameSpeed += 0.1;
         
         continue; // Skip collision check for removed obstacle
       }
@@ -604,31 +604,15 @@ if (dinoCanvas) {
       }
     }
     
-    // Spawn obstacles - more obstacles spawn as score increases
-    const baseInterval = 60;
-    const spawnInterval = Math.max(30, baseInterval - score * 5);
+    // Spawn obstacles at regular intervals
+    const spawnInterval = 90;
     
     if (frameCount % spawnInterval === 0) {
-      // Minimum gap between obstacles (gets smaller as score increases)
-      const minGap = Math.max(80, 200 - score * 20);
       const lastObstacle = obstacles[obstacles.length - 1];
       
-      if (!lastObstacle || lastObstacle.x < dinoCanvas.width - minGap) {
+      // Ensure minimum gap of 250px between obstacles
+      if (!lastObstacle || lastObstacle.x < dinoCanvas.width - 250) {
         spawnObstacle();
-        
-        // After score 3, sometimes spawn multiple obstacles at once
-        if (score >= 3 && Math.random() > 0.5) {
-          setTimeout(() => {
-            if (gameRunning && !gameOver) spawnObstacle();
-          }, 100);
-        }
-        
-        // After score 5, even more chaos
-        if (score >= 5 && Math.random() > 0.6) {
-          setTimeout(() => {
-            if (gameRunning && !gameOver) spawnObstacle();
-          }, 200);
-        }
       }
     }
     
@@ -649,8 +633,8 @@ if (dinoCanvas) {
     groundOffset = (groundOffset + gameSpeed) % 20;
     
     // Cap max speed
-    if (gameSpeed > 14) {
-      gameSpeed = 14;
+    if (gameSpeed > 12) {
+      gameSpeed = 12;
     }
   }
   
