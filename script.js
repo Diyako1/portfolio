@@ -343,7 +343,7 @@ if (dinoCanvas) {
   // Draw dino (T-Rex style like Chrome game)
   function drawDino() {
     const colors = getGameColors();
-    dinoCtx.fillStyle = colors.dino;
+    dinoCtx.fillStyle = colors.fg;
     
     const dinoHeight = dino.ducking ? 15 : dino.height;
     const dinoY = dino.ducking ? groundY - 15 : dino.y - dino.height;
@@ -367,7 +367,7 @@ if (dinoCanvas) {
       // Eye
       dinoCtx.fillStyle = colors.bg;
       dinoCtx.fillRect(x + 26, dinoY + 2, 4, 4);
-      dinoCtx.fillStyle = colors.dino;
+      dinoCtx.fillStyle = colors.fg;
       
       // Body (main torso)
       dinoCtx.fillRect(x + 5, dinoY + 14, 20, 18);
