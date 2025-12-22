@@ -149,7 +149,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #ff1493;
+  background-color: #40e0d0;
   transition: width 0.15s ease;
 }
 
@@ -247,7 +247,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #ff1493;
+  background-color: #40e0d0;
   transition: width 0.15s ease;
 }
 
@@ -268,7 +268,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #ff1493;
+  background-color: #40e0d0;
   transition: width 0.15s ease;
 }
 
@@ -338,7 +338,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #ff1493;
+  background-color: #40e0d0;
   transition: width 0.15s ease;
 }
 
@@ -531,7 +531,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #ff1493;
+  background-color: #40e0d0;
   transition: width 0.15s ease;
 }
 
@@ -540,7 +540,7 @@ body {
 }
 
 .nav-link.active {
-  color: #ff1493;
+  color: #40e0d0;
   font-weight: 600;
 }
 
