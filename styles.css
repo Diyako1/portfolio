@@ -150,7 +150,7 @@ body {
   width: 0;
   height: 2px;
   background-color: #40e0d0;
-  transition: width 0.15s ease;
+  transition: width 0.3s ease;
 }
 
 .bio strong a:hover::after {
@@ -248,7 +248,7 @@ body {
   width: 0;
   height: 2px;
   background-color: #40e0d0;
-  transition: width 0.15s ease;
+  transition: width 0.3s ease;
 }
 
 .experience-item:hover strong span[style*="border-bottom"]::after {
@@ -269,7 +269,7 @@ body {
   width: 0;
   height: 2px;
   background-color: #40e0d0;
-  transition: width 0.15s ease;
+  transition: width 0.3s ease;
 }
 
 .experience-item:hover .project-name::after {
@@ -339,7 +339,7 @@ body {
   width: 0;
   height: 2px;
   background-color: #40e0d0;
-  transition: width 0.15s ease;
+  transition: width 0.3s ease;
 }
 
 .bottom-email:hover::after {
@@ -532,7 +532,7 @@ body {
   width: 0;
   height: 2px;
   background-color: #40e0d0;
-  transition: width 0.15s ease;
+  transition: width 0.3s ease;
 }
 
 .nav-link:hover::after {
