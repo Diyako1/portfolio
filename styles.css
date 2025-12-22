@@ -530,9 +530,9 @@ body {
 }
 
 .nav-link.active {
-  color: var(--highlight-color);
+  color: #4a9eff;
   font-weight: 600;
-  border-bottom: 1px solid var(--highlight-color);
+  border-bottom: 1px solid #4a9eff;
 }
 
 .nav-link:hover {
