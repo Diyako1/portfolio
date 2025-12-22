@@ -395,57 +395,6 @@ body {
   display: none;
 }
 
-/* Target Cursor */
-.target-cursor-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.target-cursor-dot {
-  display: none;
-}
-
-.target-cursor-corner {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border: 2px solid #fff;
-  transition: transform 0.15s ease;
-}
-
-.corner-tl {
-  border-right: none;
-  border-bottom: none;
-}
-
-.corner-tr {
-  border-left: none;
-  border-bottom: none;
-}
-
-.corner-br {
-  border-left: none;
-  border-top: none;
-}
-
-.corner-bl {
-  border-right: none;
-  border-top: none;
-}
-
-@media (max-width: 768px), (hover: none) {
-  .target-cursor-wrapper {
-    display: none;
-  }
-}
 
 /* Footer */
 .footer {

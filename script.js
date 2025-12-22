@@ -189,61 +189,6 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 animate();
 
-// Target Cursor
-const cursorWrapper = document.querySelector('.target-cursor-wrapper');
-const corners = document.querySelectorAll('.target-cursor-corner');
-
-// Check if mobile/touch device
-const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-if (!isMobile && cursorWrapper) {
-  let mouseX = 0, mouseY = 0;
-  let isActive = false;
-  
-  // Hide cursor wrapper by default
-  cursorWrapper.style.opacity = '0';
-  
-  // Track mouse position
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    if (isActive) {
-      cursorWrapper.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-    }
-  });
-  
-  // Target hover effect
-  const targets = document.querySelectorAll('.cursor-target');
-  
-  targets.forEach(target => {
-    target.addEventListener('mouseenter', () => {
-      isActive = true;
-      cursorWrapper.style.opacity = '1';
-      document.body.style.cursor = 'none';
-      target.style.cursor = 'none';
-      
-      const rect = target.getBoundingClientRect();
-      const padding = 3;
-      const cornerSize = 8;
-      
-      cursorWrapper.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-      
-      // Position corners exactly around the target element
-      corners[0].style.transform = `translate(${rect.left - mouseX - padding}px, ${rect.top - mouseY - padding}px)`;
-      corners[1].style.transform = `translate(${rect.right - mouseX + padding - cornerSize}px, ${rect.top - mouseY - padding}px)`;
-      corners[2].style.transform = `translate(${rect.right - mouseX + padding - cornerSize}px, ${rect.bottom - mouseY + padding - cornerSize}px)`;
-      corners[3].style.transform = `translate(${rect.left - mouseX - padding}px, ${rect.bottom - mouseY + padding - cornerSize}px)`;
-    });
-    
-    target.addEventListener('mouseleave', () => {
-      isActive = false;
-      cursorWrapper.style.opacity = '0';
-      document.body.style.cursor = '';
-      target.style.cursor = '';
-    });
-  });
-}
 
 // Decrypted Text Effect
 const decryptElements = document.querySelectorAll('.decrypt-text');
