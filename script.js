@@ -330,10 +330,12 @@ if (dinoCanvas) {
     return isDarkMode ? {
       bg: '#000000',
       fg: '#ffffff',
+      dino: '#40e0d0',
       ground: '#333333'
     } : {
       bg: '#f5f5f5',
       fg: '#535353',
+      dino: '#40e0d0',
       ground: '#cccccc'
     };
   }
@@ -341,7 +343,7 @@ if (dinoCanvas) {
   // Draw dino (T-Rex style like Chrome game)
   function drawDino() {
     const colors = getGameColors();
-    dinoCtx.fillStyle = colors.fg;
+    dinoCtx.fillStyle = colors.dino;
     
     const dinoHeight = dino.ducking ? 15 : dino.height;
     const dinoY = dino.ducking ? groundY - 15 : dino.y - dino.height;
