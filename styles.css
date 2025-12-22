@@ -552,10 +552,6 @@ body {
   width: 100%;
 }
 
-.nav-link:hover {
-  color: #ff1493;
-}
-
 /* Theme Toggle Button */
 #theme-toggle {
   background: transparent;
