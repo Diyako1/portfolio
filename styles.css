@@ -149,7 +149,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #4a9eff;
+  background-color: #ff69b4;
   transition: width 0.15s ease;
 }
 
@@ -247,7 +247,7 @@ body {
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: #4a9eff;
+  background-color: #ff69b4;
   opacity: 0.5;
   transition: opacity 0.15s ease;
 }
@@ -269,7 +269,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #4a9eff;
+  background-color: #ff69b4;
   transition: width 0.15s ease;
 }
 
@@ -536,7 +536,7 @@ body {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: #4a9eff;
+  background-color: #ff69b4;
   transition: width 0.15s ease;
 }
 
@@ -545,7 +545,7 @@ body {
 }
 
 .nav-link.active {
-  color: #4a9eff;
+  color: #ff69b4;
   font-weight: 600;
 }
 
@@ -554,7 +554,7 @@ body {
 }
 
 .nav-link:hover {
-  color: #4a9eff;
+  color: #ff69b4;
 }
 
 /* Theme Toggle Button */
