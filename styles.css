@@ -468,7 +468,7 @@ body {
 }
 
 .header-social-link:hover {
-  color: var(--highlight-color);
+  color: #40e0d0;
 }
 
 /* Decrypt Text */
