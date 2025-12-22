@@ -325,9 +325,9 @@ body {
 }
 
 .bottom-email {
-  color: var(--text-muted);
+  color: #ff1493;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: opacity 0.2s ease;
   position: relative;
 }
 
@@ -337,13 +337,13 @@ body {
   bottom: -2px;
   left: 0;
   width: 0;
-  height: 1px;
-  background-color: var(--highlight-color);
+  height: 2px;
+  background-color: #ff1493;
   transition: width 0.15s ease;
 }
 
 .bottom-email:hover {
-  color: var(--highlight-color);
+  opacity: 0.8;
 }
 
 .bottom-email:hover::after {
