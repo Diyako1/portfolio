@@ -367,7 +367,7 @@ if (dinoCanvas) {
       // Eye
       dinoCtx.fillStyle = colors.bg;
       dinoCtx.fillRect(x + 26, dinoY + 2, 4, 4);
-      dinoCtx.fillStyle = colors.fg;
+      dinoCtx.fillStyle = colors.dino;
       
       // Body (main torso)
       dinoCtx.fillRect(x + 5, dinoY + 14, 20, 18);
