@@ -302,7 +302,7 @@ if (dinoCanvas) {
     x: 30,
     y: groundY,
     width: 44,
-    height: 60,
+    height: 58,
     velocityY: 0,
     jumping: false,
     ducking: false
@@ -335,7 +335,7 @@ if (dinoCanvas) {
     };
   }
   
-  // Draw dino (Classic Chrome T-Rex pixel art style)
+  // Draw dino (Exact Chrome T-Rex pixel art)
   function drawDino() {
     const colors = getGameColors();
     dinoCtx.fillStyle = colors.fg;
@@ -343,21 +343,14 @@ if (dinoCanvas) {
     const x = dino.x;
     const y = dino.y - dino.height;
     
-    // Smaller pixel size for more detail
-    const p = 1;
-    
     if (dino.ducking) {
       // Ducking dino
       const dy = groundY - 30;
-      // Long body
       dinoCtx.fillRect(x, dy + 10, 55, 14);
-      // Head
       dinoCtx.fillRect(x + 45, dy + 4, 20, 12);
       dinoCtx.fillRect(x + 55, dy, 10, 8);
-      // Eye
       dinoCtx.fillStyle = colors.bg;
       dinoCtx.fillRect(x + 58, dy + 3, 4, 4);
-      // Legs
       dinoCtx.fillStyle = colors.fg;
       if (Math.floor(frameCount / 5) % 2 === 0) {
         dinoCtx.fillRect(x + 10, dy + 24, 6, 6);
@@ -367,55 +360,58 @@ if (dinoCanvas) {
         dinoCtx.fillRect(x + 24, dy + 24, 6, 6);
       }
     } else {
-      // Standing T-Rex (classic Chrome style - more detailed)
-      // Head - top part
-      dinoCtx.fillRect(x + 18, y, 22, 8);
-      dinoCtx.fillRect(x + 16, y + 8, 26, 8);
-      dinoCtx.fillRect(x + 18, y + 16, 24, 6);
-      // Mouth area
-      dinoCtx.fillRect(x + 30, y + 22, 12, 4);
+      // Standing T-Rex - exact Chrome style
+      // Head row by row (building the iconic shape)
+      // Top of head
+      dinoCtx.fillRect(x + 22, y, 18, 4);
+      dinoCtx.fillRect(x + 18, y + 4, 26, 4);
+      dinoCtx.fillRect(x + 18, y + 8, 26, 4);
+      dinoCtx.fillRect(x + 18, y + 12, 26, 4);
+      dinoCtx.fillRect(x + 22, y + 16, 22, 4);
+      dinoCtx.fillRect(x + 30, y + 20, 14, 4);
       
-      // Eye (cutout)
+      // Eye (white square cutout)
       dinoCtx.fillStyle = colors.bg;
-      dinoCtx.fillRect(x + 32, y + 4, 5, 5);
+      dinoCtx.fillRect(x + 34, y + 6, 4, 4);
       dinoCtx.fillStyle = colors.fg;
       
-      // Neck and body
-      dinoCtx.fillRect(x + 10, y + 22, 24, 20);
-      dinoCtx.fillRect(x + 6, y + 26, 8, 14);
-      
-      // Tail
-      dinoCtx.fillRect(x - 4, y + 24, 14, 8);
-      dinoCtx.fillRect(x - 12, y + 22, 10, 6);
-      dinoCtx.fillRect(x - 18, y + 20, 8, 5);
-      dinoCtx.fillRect(x - 22, y + 18, 6, 4);
+      // Body
+      dinoCtx.fillRect(x + 14, y + 24, 20, 4);
+      dinoCtx.fillRect(x + 10, y + 28, 24, 4);
+      dinoCtx.fillRect(x + 6, y + 32, 28, 4);
+      dinoCtx.fillRect(x + 6, y + 36, 24, 4);
+      dinoCtx.fillRect(x + 10, y + 40, 16, 4);
       
       // Arm
-      dinoCtx.fillRect(x + 26, y + 32, 10, 4);
-      dinoCtx.fillRect(x + 32, y + 36, 4, 5);
+      dinoCtx.fillRect(x + 26, y + 36, 8, 4);
+      dinoCtx.fillRect(x + 30, y + 40, 4, 6);
       
-      // Legs animation
+      // Tail
+      dinoCtx.fillRect(x + 2, y + 28, 6, 4);
+      dinoCtx.fillRect(x - 4, y + 26, 8, 4);
+      dinoCtx.fillRect(x - 10, y + 24, 8, 4);
+      dinoCtx.fillRect(x - 14, y + 22, 6, 4);
+      dinoCtx.fillRect(x - 18, y + 20, 6, 4);
+      
+      // Legs
       if (dino.jumping) {
-        // Both legs together when jumping
-        dinoCtx.fillRect(x + 8, y + 42, 8, 16);
-        dinoCtx.fillRect(x + 20, y + 42, 8, 16);
-        // Feet
-        dinoCtx.fillRect(x + 4, y + 56, 14, 4);
-        dinoCtx.fillRect(x + 16, y + 56, 14, 4);
+        // Both legs down when jumping
+        dinoCtx.fillRect(x + 8, y + 44, 6, 12);
+        dinoCtx.fillRect(x + 18, y + 44, 6, 12);
+        dinoCtx.fillRect(x + 4, y + 54, 12, 4);
+        dinoCtx.fillRect(x + 14, y + 54, 12, 4);
       } else {
         // Running animation
         if (Math.floor(frameCount / 5) % 2 === 0) {
-          // Left leg forward
-          dinoCtx.fillRect(x + 8, y + 42, 8, 16);
-          dinoCtx.fillRect(x + 4, y + 56, 14, 4);
-          // Right leg back
-          dinoCtx.fillRect(x + 20, y + 42, 8, 10);
+          // Frame 1: left leg forward, right leg back
+          dinoCtx.fillRect(x + 8, y + 44, 6, 12);
+          dinoCtx.fillRect(x + 4, y + 54, 12, 4);
+          dinoCtx.fillRect(x + 18, y + 44, 6, 6);
         } else {
-          // Right leg forward
-          dinoCtx.fillRect(x + 20, y + 42, 8, 16);
-          dinoCtx.fillRect(x + 16, y + 56, 14, 4);
-          // Left leg back
-          dinoCtx.fillRect(x + 8, y + 42, 8, 10);
+          // Frame 2: right leg forward, left leg back
+          dinoCtx.fillRect(x + 18, y + 44, 6, 12);
+          dinoCtx.fillRect(x + 14, y + 54, 12, 4);
+          dinoCtx.fillRect(x + 8, y + 44, 6, 6);
         }
       }
     }
