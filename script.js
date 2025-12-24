@@ -20,69 +20,46 @@ if (localStorage.getItem('theme') === 'light') {
   document.documentElement.classList.add('light-mode');
 }
 
-// Interactive Dot Grid with Proximity and Shock Wave Effects
+// Interactive Dot Grid with Mouse Distortion Effect
 const canvas = document.getElementById('dot-canvas');
 const ctx = canvas.getContext('2d');
 
-// Dot grid settings
-let DOT_SIZE = window.innerWidth <= 600 ? 2 : 3;
-let GAP = window.innerWidth <= 600 ? 20 : 15;
-const BASE_COLOR = 'rgba(128, 128, 128, 0.5)'; // Gray dots
-const ACTIVE_COLOR_DARK = '#40e0d0'; // Turquoise in dark mode
-const ACTIVE_COLOR_LIGHT = '#ff1493'; // Pink in light mode
-const PROXIMITY = 120;
-const SHOCK_RADIUS = 250;
-const SHOCK_STRENGTH = 5;
-const RESISTANCE = 750;
-const RETURN_DURATION = 1.5;
+// Dot grid settings - same size as before
+let DOT_SPACING = window.innerWidth <= 600 ? 24 : 16;
+const DOT_RADIUS = 1;
+const MOUSE_RADIUS = 120; // How far the mouse affects dots
+const PUSH_STRENGTH = 15; // How much dots get pushed away
+const RETURN_SPEED = 0.08; // How fast dots return to original position
 
 let dots = [];
 let mouseX = -1000;
 let mouseY = -1000;
-let shockWaves = [];
 let animationId = null;
 
 // Initialize canvas size
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  DOT_SIZE = window.innerWidth <= 600 ? 2 : 3;
-  GAP = window.innerWidth <= 600 ? 20 : 15;
+  DOT_SPACING = window.innerWidth <= 600 ? 24 : 16;
   initDots();
 }
 
 // Create dot grid
 function initDots() {
   dots = [];
-  const cols = Math.ceil(canvas.width / GAP) + 1;
-  const rows = Math.ceil(canvas.height / GAP) + 1;
+  const cols = Math.ceil(canvas.width / DOT_SPACING) + 1;
+  const rows = Math.ceil(canvas.height / DOT_SPACING) + 1;
   
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       dots.push({
-        originalX: i * GAP,
-        originalY: j * GAP,
-        x: i * GAP,
-        y: j * GAP,
-        vx: 0,
-        vy: 0,
-        returnStartTime: null,
-        returnStartX: null,
-        returnStartY: null
+        originalX: i * DOT_SPACING,
+        originalY: j * DOT_SPACING,
+        x: i * DOT_SPACING,
+        y: j * DOT_SPACING
       });
     }
   }
-}
-
-// Easing function for smooth return
-function easeOutElastic(t) {
-  const p = 0.3;
-  return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
-}
-
-// Get active color based on theme
-function getActiveColor() {
-  return isDarkMode ? ACTIVE_COLOR_DARK : ACTIVE_COLOR_LIGHT;
 }
 
 // Draw all dots
@@ -92,102 +69,38 @@ function drawDots() {
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  const activeColor = getActiveColor();
-  const now = performance.now();
-  
+  // Draw dots - same color always
+  ctx.fillStyle = getDotColor();
   for (const dot of dots) {
-    // Calculate distance to mouse
-    const dx = mouseX - dot.x;
-    const dy = mouseY - dot.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    
-    // Determine color based on proximity
-    let color = getDotColor();
-    if (distance < PROXIMITY) {
-      const intensity = 1 - (distance / PROXIMITY);
-      color = activeColor;
-      ctx.globalAlpha = 0.5 + intensity * 0.5;
-    } else {
-      ctx.globalAlpha = 0.5;
-    }
-    
-    ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(dot.x, dot.y, DOT_SIZE, 0, Math.PI * 2);
+    ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
     ctx.fill();
   }
-  
-  ctx.globalAlpha = 1;
 }
 
 // Update dot positions
 function updateDots() {
-  const now = performance.now();
-  
   for (const dot of dots) {
-    // Apply shock wave forces
-    for (const shock of shockWaves) {
-      const dx = dot.originalX - shock.x;
-      const dy = dot.originalY - shock.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      if (distance < shock.radius && distance > 0) {
-        const force = (1 - distance / shock.radius) * shock.strength;
-        dot.vx += (dx / distance) * force;
-        dot.vy += (dy / distance) * force;
-        dot.returnStartTime = now;
-        dot.returnStartX = dot.x + dot.vx;
-        dot.returnStartY = dot.y + dot.vy;
-      }
+    // Calculate distance from mouse to dot's original position
+    const dx = dot.originalX - mouseX;
+    const dy = dot.originalY - mouseY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Target position (where dot should be)
+    let targetX = dot.originalX;
+    let targetY = dot.originalY;
+    
+    // If mouse is close, push the dot away
+    if (distance < MOUSE_RADIUS && distance > 0) {
+      const force = (1 - distance / MOUSE_RADIUS) * PUSH_STRENGTH;
+      targetX = dot.originalX + (dx / distance) * force;
+      targetY = dot.originalY + (dy / distance) * force;
     }
     
-    // Apply velocity
-    dot.x += dot.vx;
-    dot.y += dot.vy;
-    
-    // Damping
-    dot.vx *= 0.95;
-    dot.vy *= 0.95;
-    
-    // Return to original position with elastic easing
-    if (dot.returnStartTime !== null) {
-      const elapsed = (now - dot.returnStartTime) / 1000;
-      const progress = Math.min(elapsed / RETURN_DURATION, 1);
-      
-      if (progress < 1) {
-        const eased = easeOutElastic(progress);
-        dot.x = dot.returnStartX + (dot.originalX - dot.returnStartX) * eased;
-        dot.y = dot.returnStartY + (dot.originalY - dot.returnStartY) * eased;
-      } else {
-        dot.x = dot.originalX;
-        dot.y = dot.originalY;
-        dot.returnStartTime = null;
-      }
-    } else {
-      // Gentle return for dots not in shock wave
-      const returnDx = dot.originalX - dot.x;
-      const returnDy = dot.originalY - dot.y;
-      dot.x += returnDx * 0.05;
-      dot.y += returnDy * 0.05;
-    }
+    // Smoothly move dot towards target position
+    dot.x += (targetX - dot.x) * RETURN_SPEED;
+    dot.y += (targetY - dot.y) * RETURN_SPEED;
   }
-  
-  // Update and remove expired shock waves
-  shockWaves = shockWaves.filter(shock => {
-    shock.radius += 10;
-    shock.strength *= 0.95;
-    return shock.strength > 0.1;
-  });
-}
-
-// Create shock wave on click
-function createShockWave(x, y) {
-  shockWaves.push({
-    x: x,
-    y: y,
-    radius: 0,
-    strength: SHOCK_STRENGTH
-  });
 }
 
 // Mouse move handler
@@ -200,11 +113,6 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseleave', () => {
   mouseX = -1000;
   mouseY = -1000;
-});
-
-// Click handler for shock wave
-canvas.addEventListener('click', (e) => {
-  createShockWave(e.clientX, e.clientY);
 });
 
 // Animation loop
