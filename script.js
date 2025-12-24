@@ -26,7 +26,7 @@ const ctx = canvas.getContext('2d');
 
 // Dot grid settings - same size as before
 let DOT_SPACING = window.innerWidth <= 600 ? 24 : 16;
-const DOT_RADIUS = 2;
+const DOT_RADIUS = 1;
 const MOUSE_RADIUS = 120; // How far the mouse affects dots
 const PUSH_STRENGTH = 15; // How much dots get pushed away
 const RETURN_SPEED = 0.08; // How fast dots return to original position
