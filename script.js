@@ -555,16 +555,16 @@ if (dinoCanvas) {
     const dinoHeight = dino.ducking ? 30 : dino.height;
     const dinoY = dino.ducking ? groundY - 30 : dino.y - dino.height;
     
-    // Dino hitbox
-    const dinoLeft = dino.x;
-    const dinoRight = dino.x + dino.width - 5;
-    const dinoTop = dinoY + 5;
-    const dinoBottom = groundY;
+    // Dino hitbox - smaller and more forgiving
+    const dinoLeft = dino.x + 10;
+    const dinoRight = dino.x + dino.width - 15;
+    const dinoTop = dinoY + 10;
+    const dinoBottom = dino.y; // Use actual dino y position (feet)
     
-    // Obstacle hitbox
-    const obsLeft = obs.x + 4;
-    const obsRight = obs.x + obs.width - 4;
-    const obsTop = groundY - obs.height;
+    // Obstacle hitbox - tighter around the cactus stem
+    const obsLeft = obs.x + 6;
+    const obsRight = obs.x + obs.width - 6;
+    const obsTop = groundY - obs.height + 5;
     const obsBottom = groundY;
     
     return dinoRight > obsLeft &&
