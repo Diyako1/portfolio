@@ -299,10 +299,10 @@ if (dinoCanvas) {
   
   // Dino
   const dino = {
-    x: 30,
+    x: 50,
     y: groundY,
-    width: 44,
-    height: 58,
+    width: 35,
+    height: 44,
     velocityY: 0,
     jumping: false,
     ducking: false
@@ -335,133 +335,86 @@ if (dinoCanvas) {
     };
   }
   
-  // Draw dino (Exact Chrome T-Rex pixel art)
+  // Draw dino (T-Rex style like Chrome game)
   function drawDino() {
     const colors = getGameColors();
     dinoCtx.fillStyle = colors.fg;
     
+    const dinoHeight = dino.ducking ? 15 : dino.height;
+    const dinoY = dino.ducking ? groundY - 15 : dino.y - dino.height;
     const x = dino.x;
-    const y = dino.y - dino.height;
     
     if (dino.ducking) {
-      // Ducking dino
-      const dy = groundY - 30;
-      dinoCtx.fillRect(x, dy + 10, 55, 14);
-      dinoCtx.fillRect(x + 45, dy + 4, 20, 12);
-      dinoCtx.fillRect(x + 55, dy, 10, 8);
+      // Ducking dino - flat and long
+      dinoCtx.fillRect(x, dinoY + 5, 35, 10); // Long body
+      dinoCtx.fillRect(x + 30, dinoY, 12, 10); // Head
       dinoCtx.fillStyle = colors.bg;
-      dinoCtx.fillRect(x + 58, dy + 3, 4, 4);
-      dinoCtx.fillStyle = colors.fg;
-      if (Math.floor(frameCount / 5) % 2 === 0) {
-        dinoCtx.fillRect(x + 10, dy + 24, 6, 6);
-        dinoCtx.fillRect(x + 24, dy + 24, 6, 3);
-      } else {
-        dinoCtx.fillRect(x + 10, dy + 24, 6, 3);
-        dinoCtx.fillRect(x + 24, dy + 24, 6, 6);
-      }
+      dinoCtx.fillRect(x + 38, dinoY + 2, 3, 3); // Eye
     } else {
-      // Standing T-Rex - with pointy snout and open mouth
-      // Top of head
-      dinoCtx.fillRect(x + 22, y, 20, 4);
-      dinoCtx.fillRect(x + 18, y + 4, 28, 4);
-      dinoCtx.fillRect(x + 18, y + 8, 30, 4);
-      // Snout - pointy
-      dinoCtx.fillRect(x + 18, y + 12, 32, 4);
-      dinoCtx.fillRect(x + 22, y + 16, 28, 4);
-      // Open mouth gap
-      dinoCtx.fillRect(x + 30, y + 20, 20, 3);
-      // Lower jaw
-      dinoCtx.fillRect(x + 26, y + 23, 22, 4);
+      // Standing T-Rex
       
-      // Eye (white square cutout)
+      // Head (rectangular with flat top)
+      dinoCtx.fillRect(x + 10, dinoY - 2, 22, 16);
+      
+      // Snout bump
+      dinoCtx.fillRect(x + 28, dinoY + 2, 6, 8);
+      
+      // Eye
       dinoCtx.fillStyle = colors.bg;
-      dinoCtx.fillRect(x + 38, y + 6, 4, 4);
-      // Mouth opening
-      dinoCtx.fillRect(x + 34, y + 16, 12, 4);
+      dinoCtx.fillRect(x + 26, dinoY + 2, 4, 4);
       dinoCtx.fillStyle = colors.fg;
       
-      // Body
-      dinoCtx.fillRect(x + 14, y + 24, 20, 4);
-      dinoCtx.fillRect(x + 10, y + 28, 24, 4);
-      dinoCtx.fillRect(x + 6, y + 32, 28, 4);
-      dinoCtx.fillRect(x + 6, y + 36, 24, 4);
-      dinoCtx.fillRect(x + 10, y + 40, 16, 4);
+      // Body (main torso)
+      dinoCtx.fillRect(x + 5, dinoY + 14, 20, 18);
       
-      // Arm
-      dinoCtx.fillRect(x + 26, y + 36, 8, 4);
-      dinoCtx.fillRect(x + 30, y + 40, 4, 6);
+      // Back curve
+      dinoCtx.fillRect(x + 2, dinoY + 16, 6, 12);
       
       // Tail
-      dinoCtx.fillRect(x + 2, y + 28, 6, 4);
-      dinoCtx.fillRect(x - 4, y + 26, 8, 4);
-      dinoCtx.fillRect(x - 10, y + 24, 8, 4);
-      dinoCtx.fillRect(x - 14, y + 22, 6, 4);
-      dinoCtx.fillRect(x - 18, y + 20, 6, 4);
+      dinoCtx.fillRect(x - 8, dinoY + 14, 12, 6);
+      dinoCtx.fillRect(x - 14, dinoY + 12, 8, 5);
+      dinoCtx.fillRect(x - 18, dinoY + 10, 6, 4);
       
-      // Legs
+      // Tiny arms (T-Rex style!)
+      dinoCtx.fillRect(x + 20, dinoY + 18, 6, 3);
+      dinoCtx.fillRect(x + 24, dinoY + 20, 3, 4);
+      
+      // Legs animation
       if (dino.jumping) {
         // Both legs down when jumping
-        dinoCtx.fillRect(x + 8, y + 44, 6, 12);
-        dinoCtx.fillRect(x + 18, y + 44, 6, 12);
-        dinoCtx.fillRect(x + 4, y + 54, 12, 4);
-        dinoCtx.fillRect(x + 14, y + 54, 12, 4);
+        dinoCtx.fillRect(x + 6, dinoY + 32, 6, 10);
+        dinoCtx.fillRect(x + 16, dinoY + 32, 6, 10);
+        // Feet
+        dinoCtx.fillRect(x + 4, dinoY + 40, 10, 3);
+        dinoCtx.fillRect(x + 14, dinoY + 40, 10, 3);
       } else {
-        // Running animation
+        // Running animation - alternate legs
         if (Math.floor(frameCount / 5) % 2 === 0) {
-          // Frame 1: left leg forward, right leg back
-          dinoCtx.fillRect(x + 8, y + 44, 6, 12);
-          dinoCtx.fillRect(x + 4, y + 54, 12, 4);
-          dinoCtx.fillRect(x + 18, y + 44, 6, 6);
+          // Left leg forward, right leg back
+          dinoCtx.fillRect(x + 6, dinoY + 32, 6, 8);
+          dinoCtx.fillRect(x + 4, dinoY + 38, 10, 3);
+          dinoCtx.fillRect(x + 16, dinoY + 32, 6, 10);
+          dinoCtx.fillRect(x + 14, dinoY + 40, 10, 3);
         } else {
-          // Frame 2: right leg forward, left leg back
-          dinoCtx.fillRect(x + 18, y + 44, 6, 12);
-          dinoCtx.fillRect(x + 14, y + 54, 12, 4);
-          dinoCtx.fillRect(x + 8, y + 44, 6, 6);
+          // Right leg forward, left leg back
+          dinoCtx.fillRect(x + 6, dinoY + 32, 6, 10);
+          dinoCtx.fillRect(x + 4, dinoY + 40, 10, 3);
+          dinoCtx.fillRect(x + 16, dinoY + 32, 6, 8);
+          dinoCtx.fillRect(x + 14, dinoY + 38, 10, 3);
         }
       }
     }
   }
   
-  // Draw cactus obstacle (classic Chrome style)
+  // Draw obstacle - each obstacle has unique random shapes stored in obs.shapes
   function drawObstacle(obs) {
     const colors = getGameColors();
     dinoCtx.fillStyle = colors.fg;
     
-    const x = obs.x;
-    
-    if (obs.type === 'small') {
-      // Small single cactus
-      dinoCtx.fillRect(x + 6, groundY - 34, 8, 34); // Main stem
-      // Left arm
-      dinoCtx.fillRect(x, groundY - 26, 8, 14);
-      dinoCtx.fillRect(x + 6, groundY - 26, 8, 4);
-      // Right arm
-      dinoCtx.fillRect(x + 12, groundY - 20, 8, 10);
-      dinoCtx.fillRect(x + 6, groundY - 20, 8, 4);
-    } else if (obs.type === 'large') {
-      // Large single cactus
-      dinoCtx.fillRect(x + 8, groundY - 50, 10, 50); // Main stem
-      // Left arm
-      dinoCtx.fillRect(x, groundY - 38, 10, 18);
-      dinoCtx.fillRect(x + 8, groundY - 38, 10, 5);
-      // Right arm
-      dinoCtx.fillRect(x + 16, groundY - 28, 10, 14);
-      dinoCtx.fillRect(x + 8, groundY - 28, 10, 5);
-    } else {
-      // Group of cacti
-      // First cactus (smaller)
-      dinoCtx.fillRect(x + 4, groundY - 34, 7, 34);
-      dinoCtx.fillRect(x, groundY - 26, 6, 12);
-      dinoCtx.fillRect(x + 4, groundY - 26, 6, 4);
-      dinoCtx.fillRect(x + 9, groundY - 18, 6, 8);
-      dinoCtx.fillRect(x + 4, groundY - 18, 6, 4);
-      // Second cactus (taller)
-      dinoCtx.fillRect(x + 20, groundY - 44, 8, 44);
-      dinoCtx.fillRect(x + 16, groundY - 34, 6, 14);
-      dinoCtx.fillRect(x + 20, groundY - 34, 6, 4);
-      dinoCtx.fillRect(x + 26, groundY - 24, 6, 10);
-      dinoCtx.fillRect(x + 20, groundY - 24, 6, 4);
-    }
+    // Draw each shape in the obstacle
+    obs.shapes.forEach(shape => {
+      dinoCtx.fillRect(obs.x + shape.offsetX, groundY - shape.height, shape.width, shape.height);
+    });
   }
   
   // Draw cloud
@@ -498,28 +451,47 @@ if (dinoCanvas) {
     }
   }
   
-  // Generate cactus obstacle
+  // Generate random obstacle shapes
   function generateRandomObstacle() {
-    const types = ['small', 'large', 'group'];
-    const type = types[Math.floor(Math.random() * types.length)];
+    const shapes = [];
+    const numParts = 1 + Math.floor(Math.random() * 3); // 1-3 parts
+    let totalWidth = 0;
+    let maxHeight = 0;
     
-    let width, height;
-    if (type === 'small') {
-      width = 20;
-      height = 34;
-    } else if (type === 'large') {
-      width = 26;
-      height = 50;
-    } else {
-      width = 34;
-      height = 44;
+    for (let i = 0; i < numParts; i++) {
+      const width = 4 + Math.floor(Math.random() * 8); // 4-11 width
+      const height = 18 + Math.floor(Math.random() * 22); // 18-39 height
+      const offsetX = totalWidth + (i > 0 ? Math.floor(Math.random() * 3) : 0); // slight gap variation
+      
+      shapes.push({
+        offsetX,
+        width,
+        height
+      });
+      
+      totalWidth = offsetX + width;
+      maxHeight = Math.max(maxHeight, height);
+      
+      // Sometimes add small arms/branches
+      if (Math.random() > 0.5) {
+        const armHeight = 5 + Math.floor(Math.random() * 8);
+        const armWidth = 3 + Math.floor(Math.random() * 3);
+        const armY = height - 5 - Math.floor(Math.random() * (height / 2));
+        const armSide = Math.random() > 0.5 ? -armWidth : width;
+        
+        shapes.push({
+          offsetX: offsetX + armSide,
+          width: armWidth,
+          height: armY
+        });
+      }
     }
     
     return {
       x: dinoCanvas.width,
-      width: width,
-      height: height,
-      type: type
+      width: totalWidth,
+      height: maxHeight,
+      shapes
     };
   }
   
@@ -551,27 +523,33 @@ if (dinoCanvas) {
     });
   }
   
-  // Check collision with cactus
+  // Check collision - check against each shape in the obstacle
   function checkCollision(obs) {
-    const dinoHeight = dino.ducking ? 30 : dino.height;
-    const dinoY = dino.ducking ? groundY - 30 : dino.y - dino.height;
+    const dinoHeight = dino.ducking ? 15 : dino.height;
+    const dinoY = dino.ducking ? groundY - 15 : dino.y - dino.height;
     
-    // Dino hitbox - smaller and more forgiving
-    const dinoLeft = dino.x + 10;
-    const dinoRight = dino.x + dino.width - 15;
-    const dinoTop = dinoY + 10;
-    const dinoBottom = dino.y; // Use actual dino y position (feet)
+    // Dino hitbox (tight box around the dino)
+    const dinoLeft = dino.x + 5;
+    const dinoRight = dino.x + dino.width - 10;
+    const dinoTop = dinoY + 5;
+    const dinoBottom = dinoY + dinoHeight;
     
-    // Obstacle hitbox - tighter around the cactus stem
-    const obsLeft = obs.x + 6;
-    const obsRight = obs.x + obs.width - 6;
-    const obsTop = groundY - obs.height + 5;
-    const obsBottom = groundY;
+    // Check collision against each shape in the obstacle
+    for (const shape of obs.shapes) {
+      const shapeLeft = obs.x + shape.offsetX;
+      const shapeRight = obs.x + shape.offsetX + shape.width;
+      const shapeTop = groundY - shape.height;
+      const shapeBottom = groundY;
+      
+      if (dinoRight > shapeLeft &&
+          dinoLeft < shapeRight &&
+          dinoBottom > shapeTop &&
+          dinoTop < shapeBottom) {
+        return true;
+      }
+    }
     
-    return dinoRight > obsLeft &&
-           dinoLeft < obsRight &&
-           dinoBottom > obsTop &&
-           dinoTop < obsBottom;
+    return false;
   }
   
   // Update game
