@@ -360,19 +360,24 @@ if (dinoCanvas) {
         dinoCtx.fillRect(x + 24, dy + 24, 6, 6);
       }
     } else {
-      // Standing T-Rex - exact Chrome style
-      // Head row by row (building the iconic shape)
+      // Standing T-Rex - with pointy snout and open mouth
       // Top of head
-      dinoCtx.fillRect(x + 22, y, 18, 4);
-      dinoCtx.fillRect(x + 18, y + 4, 26, 4);
-      dinoCtx.fillRect(x + 18, y + 8, 26, 4);
-      dinoCtx.fillRect(x + 18, y + 12, 26, 4);
-      dinoCtx.fillRect(x + 22, y + 16, 22, 4);
-      dinoCtx.fillRect(x + 30, y + 20, 14, 4);
+      dinoCtx.fillRect(x + 22, y, 20, 4);
+      dinoCtx.fillRect(x + 18, y + 4, 28, 4);
+      dinoCtx.fillRect(x + 18, y + 8, 30, 4);
+      // Snout - pointy
+      dinoCtx.fillRect(x + 18, y + 12, 32, 4);
+      dinoCtx.fillRect(x + 22, y + 16, 28, 4);
+      // Open mouth gap
+      dinoCtx.fillRect(x + 30, y + 20, 20, 3);
+      // Lower jaw
+      dinoCtx.fillRect(x + 26, y + 23, 22, 4);
       
       // Eye (white square cutout)
       dinoCtx.fillStyle = colors.bg;
-      dinoCtx.fillRect(x + 34, y + 6, 4, 4);
+      dinoCtx.fillRect(x + 38, y + 6, 4, 4);
+      // Mouth opening
+      dinoCtx.fillRect(x + 34, y + 16, 12, 4);
       dinoCtx.fillStyle = colors.fg;
       
       // Body
