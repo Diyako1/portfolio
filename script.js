@@ -20,48 +20,69 @@ if (localStorage.getItem('theme') === 'light') {
   document.documentElement.classList.add('light-mode');
 }
 
-// Interactive Dot Grid with Gravity Well Effect
+// Interactive Dot Grid with Proximity and Shock Wave Effects
 const canvas = document.getElementById('dot-canvas');
 const ctx = canvas.getContext('2d');
 
-// Dot grid settings - increase spacing on mobile for performance
-let DOT_SPACING = window.innerWidth <= 600 ? 24 : 16;
-const DOT_RADIUS = 1;
-const GRAVITY_STRENGTH = 0.8;
-const GRAVITY_RADIUS = 300;
-const RETURN_SPEED = 0.03;
+// Dot grid settings
+let DOT_SIZE = window.innerWidth <= 600 ? 2 : 3;
+let GAP = window.innerWidth <= 600 ? 20 : 15;
+const BASE_COLOR = 'rgba(128, 128, 128, 0.5)'; // Gray dots
+const ACTIVE_COLOR_DARK = '#40e0d0'; // Turquoise in dark mode
+const ACTIVE_COLOR_LIGHT = '#ff1493'; // Pink in light mode
+const PROXIMITY = 120;
+const SHOCK_RADIUS = 250;
+const SHOCK_STRENGTH = 5;
+const RESISTANCE = 750;
+const RETURN_DURATION = 1.5;
 
 let dots = [];
-let gravityWellActive = false;
-let gravityCenter = { x: 0, y: 0 };
+let mouseX = -1000;
+let mouseY = -1000;
+let shockWaves = [];
 let animationId = null;
 
 // Initialize canvas size
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  DOT_SPACING = window.innerWidth <= 600 ? 24 : 16;
+  DOT_SIZE = window.innerWidth <= 600 ? 2 : 3;
+  GAP = window.innerWidth <= 600 ? 20 : 15;
   initDots();
 }
 
 // Create dot grid
 function initDots() {
   dots = [];
-  const cols = Math.ceil(canvas.width / DOT_SPACING) + 1;
-  const rows = Math.ceil(canvas.height / DOT_SPACING) + 1;
+  const cols = Math.ceil(canvas.width / GAP) + 1;
+  const rows = Math.ceil(canvas.height / GAP) + 1;
   
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
       dots.push({
-        originalX: i * DOT_SPACING,
-        originalY: j * DOT_SPACING,
-        x: i * DOT_SPACING,
-        y: j * DOT_SPACING,
+        originalX: i * GAP,
+        originalY: j * GAP,
+        x: i * GAP,
+        y: j * GAP,
         vx: 0,
-        vy: 0
+        vy: 0,
+        returnStartTime: null,
+        returnStartX: null,
+        returnStartY: null
       });
     }
   }
+}
+
+// Easing function for smooth return
+function easeOutElastic(t) {
+  const p = 0.3;
+  return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
+}
+
+// Get active color based on theme
+function getActiveColor() {
+  return isDarkMode ? ACTIVE_COLOR_DARK : ACTIVE_COLOR_LIGHT;
 }
 
 // Draw all dots
@@ -71,45 +92,120 @@ function drawDots() {
   ctx.fillStyle = bgColor;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Draw dots
-  ctx.fillStyle = getDotColor();
+  const activeColor = getActiveColor();
+  const now = performance.now();
+  
   for (const dot of dots) {
+    // Calculate distance to mouse
+    const dx = mouseX - dot.x;
+    const dy = mouseY - dot.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    
+    // Determine color based on proximity
+    let color = getDotColor();
+    if (distance < PROXIMITY) {
+      const intensity = 1 - (distance / PROXIMITY);
+      color = activeColor;
+      ctx.globalAlpha = 0.5 + intensity * 0.5;
+    } else {
+      ctx.globalAlpha = 0.5;
+    }
+    
+    ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(dot.x, dot.y, DOT_RADIUS, 0, Math.PI * 2);
+    ctx.arc(dot.x, dot.y, DOT_SIZE, 0, Math.PI * 2);
     ctx.fill();
   }
+  
+  ctx.globalAlpha = 1;
 }
 
 // Update dot positions
 function updateDots() {
+  const now = performance.now();
+  
   for (const dot of dots) {
-    if (gravityWellActive) {
-      // Calculate distance to gravity center
-      const dx = gravityCenter.x - dot.x;
-      const dy = gravityCenter.y - dot.y;
+    // Apply shock wave forces
+    for (const shock of shockWaves) {
+      const dx = dot.originalX - shock.x;
+      const dy = dot.originalY - shock.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       
-      if (distance < GRAVITY_RADIUS && distance > 0) {
-        // Apply gravity force (stronger when closer)
-        const force = (1 - distance / GRAVITY_RADIUS) * GRAVITY_STRENGTH;
+      if (distance < shock.radius && distance > 0) {
+        const force = (1 - distance / shock.radius) * shock.strength;
         dot.vx += (dx / distance) * force;
         dot.vy += (dy / distance) * force;
+        dot.returnStartTime = now;
+        dot.returnStartX = dot.x + dot.vx;
+        dot.returnStartY = dot.y + dot.vy;
       }
     }
     
-    // Return to original position
-    const returnDx = dot.originalX - dot.x;
-    const returnDy = dot.originalY - dot.y;
-    dot.vx += returnDx * RETURN_SPEED;
-    dot.vy += returnDy * RETURN_SPEED;
-    
-    // Apply velocity with damping
-    dot.vx *= 0.9;
-    dot.vy *= 0.9;
+    // Apply velocity
     dot.x += dot.vx;
     dot.y += dot.vy;
+    
+    // Damping
+    dot.vx *= 0.95;
+    dot.vy *= 0.95;
+    
+    // Return to original position with elastic easing
+    if (dot.returnStartTime !== null) {
+      const elapsed = (now - dot.returnStartTime) / 1000;
+      const progress = Math.min(elapsed / RETURN_DURATION, 1);
+      
+      if (progress < 1) {
+        const eased = easeOutElastic(progress);
+        dot.x = dot.returnStartX + (dot.originalX - dot.returnStartX) * eased;
+        dot.y = dot.returnStartY + (dot.originalY - dot.returnStartY) * eased;
+      } else {
+        dot.x = dot.originalX;
+        dot.y = dot.originalY;
+        dot.returnStartTime = null;
+      }
+    } else {
+      // Gentle return for dots not in shock wave
+      const returnDx = dot.originalX - dot.x;
+      const returnDy = dot.originalY - dot.y;
+      dot.x += returnDx * 0.05;
+      dot.y += returnDy * 0.05;
+    }
   }
+  
+  // Update and remove expired shock waves
+  shockWaves = shockWaves.filter(shock => {
+    shock.radius += 10;
+    shock.strength *= 0.95;
+    return shock.strength > 0.1;
+  });
 }
+
+// Create shock wave on click
+function createShockWave(x, y) {
+  shockWaves.push({
+    x: x,
+    y: y,
+    radius: 0,
+    strength: SHOCK_STRENGTH
+  });
+}
+
+// Mouse move handler
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+// Mouse leave handler
+document.addEventListener('mouseleave', () => {
+  mouseX = -1000;
+  mouseY = -1000;
+});
+
+// Click handler for shock wave
+canvas.addEventListener('click', (e) => {
+  createShockWave(e.clientX, e.clientY);
+});
 
 // Animation loop
 function animate() {
@@ -157,12 +253,6 @@ function typewriterEffect(element, fromText, toText, callback) {
 
 if (krishLink) {
   krishLink.addEventListener('mouseenter', () => {
-    // Activate gravity well
-    const rect = krishLink.getBoundingClientRect();
-    gravityCenter.x = rect.left + rect.width / 2;
-    gravityCenter.y = rect.top + rect.height / 2;
-    gravityWellActive = true;
-    
     // Typewriter effect: krish -> goat
     if (currentText === originalText) {
       typewriterEffect(krishLink, originalText, targetText, () => {
@@ -172,9 +262,6 @@ if (krishLink) {
   });
   
   krishLink.addEventListener('mouseleave', () => {
-    // Deactivate gravity well
-    gravityWellActive = false;
-    
     // Typewriter effect: goat -> krish
     if (currentText === targetText) {
       typewriterEffect(krishLink, targetText, originalText, () => {
